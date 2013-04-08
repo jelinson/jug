@@ -22,9 +22,11 @@ private:
     void splitHSV();
     void getRouteHue();
     void denoise();
+    void colorFilter();
 
     bool _loaded;
     int _routeHue;
+    int _routeXSelection, _routeYSelection;
     cv::Size _dim;
     cv::Scalar _minSatThres, _maxSatThres;
     cv::Mat _img;

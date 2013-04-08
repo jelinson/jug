@@ -92,6 +92,11 @@ void RouteFinder::denoise()
     dilate(_routeMask, _routeMask, Mat(), Point(-1,-1), 1);
 }
 
+void RouteFinder::colorFilter()
+{
+
+}
+
 void RouteFinder::detectRoute()
 {
     splitHSV();

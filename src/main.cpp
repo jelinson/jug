@@ -21,6 +21,6 @@ int main(int argc, char* argv[])
     processArgs(argc, argv, &inPath, &outPath);
 
     RouteFinder rf;
-    rf.find(inPath, true);
+    rf.find(inPath, false);
     return 0;
 }

@@ -20,11 +20,16 @@ public:
 private:
     void detectRoute();
     void splitHSV();
+    void getRouteHue();
+    void denoise();
 
     bool _loaded;
+    int _routeHue;
     cv::Size _dim;
+    cv::Scalar _minSatThres, _maxSatThres;
     cv::Mat _img;
-    std::vector<cv::Mat> _hsv;
+    cv::Mat _routeMask;
+    std::vector<cv::Mat> _hsvChannels;
 };
 
 #endif // ROUTEFINDER_H

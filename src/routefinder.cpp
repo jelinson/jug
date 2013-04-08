@@ -2,9 +2,23 @@
 
 using namespace cv;
 
+static int xMouse = 0;
+static int yMouse = 0;
+
+static void mouseEvent(int event, int x, int y, int, void*)
+{
+    if (event == CV_EVENT_LBUTTONDOWN) {
+        xMouse = x;
+        yMouse = y;
+    }
+}
+
 RouteFinder::RouteFinder()
     : _loaded(false),
-      _dim(IMG_WIDTH, IMG_HEIGHT)
+      _routeHue(0),
+      _dim(IMG_WIDTH, IMG_HEIGHT),
+      _minSatThres(MIN_SAT_THRES),
+      _maxSatThres(MAX_SAT_THRES)
 {
     // Nothing to do
 }
@@ -16,6 +30,7 @@ RouteFinder::~RouteFinder()
 
 void RouteFinder::find(const std::string& imgPath, bool show)
 {
+    _routeHue = 0;
     Mat img = imread(imgPath, CV_LOAD_IMAGE_COLOR);
     if (img.cols > img.rows)
         img = img.t();
@@ -44,76 +59,57 @@ void RouteFinder::find(const std::string& imgPath, bool show)
 
 void RouteFinder::showRoute(const std::string &imgPath)
 {
-    imshow(imgPath, _img);
-    waitKey(0);
+    jug::showImage(&_img, imgPath, true);
 }
 
-void mouseEvent(int event, int x, int y, int flags, void* param)
+void RouteFinder::splitHSV()
 {
-    if (event == CV_EVENT_LBUTTONDOWN) {
-        Mat* hue = (Mat*) param;
-        int value = hue->data[y*hue->cols + x];
-        qDebug() << value;
-    }
+    Mat hsvImg;
+    cvtColor(_img, hsvImg, CV_BGR2HSV);
+    split(hsvImg, _hsvChannels);
+}
+
+void RouteFinder::getRouteHue()
+{
+    xMouse = -1;
+    yMouse = -1;
+    jug::showImage(&_img, "Select a route");
+    setMouseCallback("Select a route", mouseEvent, 0);
+    while (xMouse < 0)
+        waitKey(30);
+    _routeHue = _hsvChannels[0].data[yMouse * _hsvChannels[0].cols + xMouse];
+    qDebug() << "Searching for route with hue" << _routeHue;
+}
+
+void RouteFinder::denoise()
+{
+    dilate(_routeMask, _routeMask, Mat(), Point(-1,-1), 2);
+    erode(_routeMask, _routeMask, Mat(), Point(-1, -1), 3);
+    dilate(_routeMask, _routeMask, Mat(), Point(-1,-1), 1);
 }
 
 void RouteFinder::detectRoute()
 {
-    Mat hsv;
-    cvtColor(_img, hsv, CV_BGR2HSV);
-    vector<Mat> channels(3);
-    split(hsv, channels);
-    jug::showImage(&_img, "orig");
-    jug::showImage(&channels[0], "hue");
-    //namedWindow("orig", WINDOW_AUTOSIZE);
-    //imshow("orig", _img);
-    //namedWindow("hue", WINDOW_AUTOSIZE);
-    //imshow("hue", channels[0]);
-    //namedWindow("s", WINDOW_AUTOSIZE);
-    //imshow("s", channels[1]);
+    splitHSV();
+    getRouteHue();
 
-    Mat binaryHue;
-    //inRange(channels[0], Scalar(78), Scalar(90), binaryHue);
-    inRange(channels[0], Scalar(170), Scalar(184), binaryHue);
-    //inRange(channels[0], Scalar(98), Scalar(108), binaryHue);
-    //namedWindow("bin", WINDOW_AUTOSIZE);
-    //imshow("bin", binaryHue);
+    Mat hueMask, satMask;
+    inRange(_hsvChannels[0], Scalar(_routeHue - HUE_MARGIN), Scalar(_routeHue + HUE_MARGIN), hueMask);
+    inRange(_hsvChannels[1], _minSatThres, _maxSatThres, satMask);
 
-    /// \todo normalize values perhaps on a per image basis
-    Mat binarySat;
-    inRange(channels[1], Scalar(40), Scalar(255), binarySat);
-    //namedWindow("binSay", WINDOW_AUTOSIZE);
-    //imshow("binSay", binarySat);
-
-    Mat route;
-    bitwise_and(binaryHue, binarySat, route);
-    //namedWindow("route", WINDOW_AUTOSIZE);
-    //imshow("route", route);
-
-    setMouseCallback("hue",mouseEvent, &channels[0]);
-    setMouseCallback("s",mouseEvent, &channels[1]);
-    setMouseCallback("v",mouseEvent, &channels[2]);
-
-    Mat denoised;
-    //erode(route, denoised, Mat());
-    dilate(route, denoised, Mat(), Point(-1,-1), 2);
-    erode(denoised, denoised, Mat(), Point(-1, -1), 3);
-    dilate(denoised, denoised, Mat(), Point(-1,-1), 1);
-    //namedWindow("quiet", WINDOW_AUTOSIZE);
-    //imshow("quiet", denoised);
+    bitwise_and(hueMask, satMask, _routeMask);
+    denoise();
+    jug::showImage(&_routeMask, "Route");
 
     /// \todo for each blob, check mean rgb and proxity to given input
     /// \todo look for nested contours with hierarchy argument
     vector<vector<Point> > contours;
-    findContours(denoised, contours, CV_RETR_LIST, CV_CHAIN_APPROX_NONE);
-    Mat drawing = Mat::zeros(route.size(), CV_8UC1);
+    findContours(_routeMask, contours, CV_RETR_LIST, CV_CHAIN_APPROX_NONE);
+    Mat drawing = Mat::zeros(_routeMask.size(), CV_8UC1);
     for (int i = 0; i < contours.size(); ++i) {
         drawContours(drawing, contours, i, Scalar(255), 2, 8);
     }
     qDebug() << "Found" << contours.size() << "contours";
-
-    //namedWindow("cont", WINDOW_AUTOSIZE);
-    //imshow("cont", drawing);
-    waitKey();
+    jug::showImage(&drawing, "Contours", true);
 }
 

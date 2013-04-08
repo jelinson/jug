@@ -92,6 +92,11 @@ void RouteFinder::denoise()
     dilate(_routeMask, _routeMask, Mat(), Point(-1,-1), 1);
 }
 
+void RouteFinder::colorFilter()
+{
+
+}
+
 void RouteFinder::detectRoute()
 {
     splitHSV();
@@ -113,6 +118,19 @@ void RouteFinder::detectRoute()
     for (int i = 0; i < contours.size(); ++i) {
         drawContours(drawing, contours, i, Scalar(255), 2, 8);
     }
+
+    vector<Rect> enclosingRect;
+    int selectionIndex = -1;
+    for (int i = 0; i < contours.size(); ++i) {
+        enclosingRect.push_back(minAreaRect(contours[i]).boundingRect());
+        if (enclosingRect[i].contains(Point(_routeXSelection,_routeYSelection))) {
+            selectionIndex = i;
+            qDebug() << "Match at" << i;
+        }
+    }
+
+
+
     qDebug() << "Found" << contours.size() << "contours";
     jug::showImage(&drawing, "Contours", true);
 }

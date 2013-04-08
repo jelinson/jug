@@ -44,3 +44,4 @@ Thumbs.db
 # Qt
 *.user
 build/*
+img/output/*

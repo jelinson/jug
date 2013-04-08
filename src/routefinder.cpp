@@ -14,7 +14,7 @@ RouteFinder::~RouteFinder()
     // Nothing to do yet
 }
 
-void RouteFinder::find(std::string& imgPath, bool show)
+void RouteFinder::find(const std::string& imgPath, bool show)
 {
     Mat img = imread(imgPath, CV_LOAD_IMAGE_COLOR);
     if (img.cols > img.rows)
@@ -42,7 +42,7 @@ void RouteFinder::find(std::string& imgPath, bool show)
         showRoute(imgPath);
 }
 
-void RouteFinder::showRoute(std::string& imgPath)
+void RouteFinder::showRoute(const std::string &imgPath)
 {
     imshow(imgPath, _img);
     waitKey(0);
@@ -59,19 +59,16 @@ void mouseEvent(int event, int x, int y, int flags, void* param)
 
 void RouteFinder::detectRoute()
 {
-//    _blob->detect(_img, _pts);
-//    qDebug() << "Found" << _pts.size() << "blobs";
-
-    //IplImage img(_img);
-
     Mat hsv;
     cvtColor(_img, hsv, CV_BGR2HSV);
     vector<Mat> channels(3);
     split(hsv, channels);
-    namedWindow("orig", WINDOW_AUTOSIZE);
-    imshow("orig", _img);
-    namedWindow("hue", WINDOW_AUTOSIZE);
-    imshow("hue", channels[0]);
+    jug::showImage(&_img, "orig");
+    jug::showImage(&channels[0], "hue");
+    //namedWindow("orig", WINDOW_AUTOSIZE);
+    //imshow("orig", _img);
+    //namedWindow("hue", WINDOW_AUTOSIZE);
+    //imshow("hue", channels[0]);
     //namedWindow("s", WINDOW_AUTOSIZE);
     //imshow("s", channels[1]);
 
@@ -90,8 +87,8 @@ void RouteFinder::detectRoute()
 
     Mat route;
     bitwise_and(binaryHue, binarySat, route);
-    namedWindow("route", WINDOW_AUTOSIZE);
-    imshow("route", route);
+    //namedWindow("route", WINDOW_AUTOSIZE);
+    //imshow("route", route);
 
     setMouseCallback("hue",mouseEvent, &channels[0]);
     setMouseCallback("s",mouseEvent, &channels[1]);
@@ -102,8 +99,8 @@ void RouteFinder::detectRoute()
     dilate(route, denoised, Mat(), Point(-1,-1), 2);
     erode(denoised, denoised, Mat(), Point(-1, -1), 3);
     dilate(denoised, denoised, Mat(), Point(-1,-1), 1);
-    namedWindow("quiet", WINDOW_AUTOSIZE);
-    imshow("quiet", denoised);
+    //namedWindow("quiet", WINDOW_AUTOSIZE);
+    //imshow("quiet", denoised);
 
     /// \todo for each blob, check mean rgb and proxity to given input
     /// \todo look for nested contours with hierarchy argument
@@ -115,24 +112,8 @@ void RouteFinder::detectRoute()
     }
     qDebug() << "Found" << contours.size() << "contours";
 
-    namedWindow("cont", WINDOW_AUTOSIZE);
-    imshow("cont", drawing);
+    //namedWindow("cont", WINDOW_AUTOSIZE);
+    //imshow("cont", drawing);
     waitKey();
-
-    //IplImage *gray = cvCreateImage(cvGetSize(&img), IPL_DEPTH_8U, 1);
-    //cvCvtColor(&img, gray, CV_BGR2HSV);
-    //vThreshold(gray, gray, 100, 150, CV_THRESH_BINARY);
-    //IplImage *labelImg=cvCreateImage(cvGetSize(gray), IPL_DEPTH_LABEL, 1);
-    //CvBlobs blobs;
-    //unsigned int result=cvLabel(gray, labelImg, blobs);
-    //cvRenderBlobs(labelImg, blobs, &img, &img);
-    //Mat copy(&img);
-    //imshow("here", copy);
-    //waitKey();
-    //for (CvBlobs::const_iterator it=blobs.begin(); it!=blobs.end(); ++it)
-    //{
-    //    qDebug() << "Blob #" << it->second->label << ": Area=" << it->second->area << ", Centroid=(" << it->second->centroid.x << ", " << it->second->centroid.y << ")" << endl;
-    //}
-
 }
 

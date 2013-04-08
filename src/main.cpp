@@ -1,5 +1,6 @@
 #include <string>
 #include "routefinder.h"
+#include "utils.h"
 
 void processArgs(int argc, char* argv[], std::string* inPath, std::string* outPath)
 {

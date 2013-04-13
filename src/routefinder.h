@@ -14,7 +14,7 @@ class RouteFinder
 public:
     RouteFinder();
     ~RouteFinder();
-    void find(const std::string& imgPath, bool show=false);
+    void find(cv::Mat *img, const std::string& imgPath, bool show=false);
     void showRoute(const std::string& imgPath);
 
 private:
@@ -27,9 +27,8 @@ private:
     bool _loaded;
     int _routeHue;
     int _routeXSelection, _routeYSelection;
-    cv::Size _dim;
     cv::Scalar _minSatThres, _maxSatThres;
-    cv::Mat _img;
+    cv::Mat* _img;
     cv::Mat _routeMask;
     std::vector<cv::Mat> _hsvChannels;
 };

@@ -18,9 +18,9 @@ RouteFinder::RouteFinder()
       _routeHue(0),
       _routeXSelection(-1),
       _routeYSelection(-1),
-      _dim(IMG_WIDTH, IMG_HEIGHT),
       _minSatThres(MIN_SAT_THRES),
-      _maxSatThres(MAX_SAT_THRES)
+      _maxSatThres(MAX_SAT_THRES),
+      _img(NULL)
 {
     // Nothing to do
 }
@@ -30,29 +30,10 @@ RouteFinder::~RouteFinder()
     // Nothing to do yet
 }
 
-void RouteFinder::find(const std::string& imgPath, bool show)
+void RouteFinder::find(Mat* img, const std::string& imgPath, bool show)
 {
+    _img = img;
     _routeHue = 0;
-    Mat img = imread(imgPath, CV_LOAD_IMAGE_COLOR);
-    if (img.cols > img.rows)
-        img = img.t();
-
-    if (!img.data) {
-        qDebug() << "Could not load" << imgPath.c_str();
-        _loaded = false;
-        return;
-    }
-
-    _img = Mat();
-    resize(img, _img, _dim);
-
-    if (_img.data)
-        _loaded = true;
-    else {
-        qDebug() << "Could not resize image";
-        _loaded = false;
-        return;
-    }
 
     detectRoute();
     if (show)
@@ -61,13 +42,13 @@ void RouteFinder::find(const std::string& imgPath, bool show)
 
 void RouteFinder::showRoute(const std::string &imgPath)
 {
-    jug::showImage(&_img, imgPath, true);
+    jug::showImage(_img, imgPath, true);
 }
 
 void RouteFinder::splitHSV()
 {
     Mat hsvImg;
-    cvtColor(_img, hsvImg, CV_BGR2HSV);
+    cvtColor(*_img, hsvImg, CV_BGR2HSV);
     split(hsvImg, _hsvChannels);
 }
 
@@ -75,7 +56,7 @@ void RouteFinder::getRouteHue()
 {
     xMouse = -1;
     yMouse = -1;
-    jug::showImage(&_img, "Select a route");
+    jug::showImage(_img, "Select a route");
     setMouseCallback("Select a route", mouseEvent, 0);
     while (xMouse < 0)
         waitKey(30);
@@ -128,8 +109,6 @@ void RouteFinder::detectRoute()
             qDebug() << "Match at" << i;
         }
     }
-
-
 
     qDebug() << "Found" << contours.size() << "contours";
     jug::showImage(&drawing, "Contours", true);

@@ -16,4 +16,24 @@ void showImage(const cv::Mat* img, const std::string& title, bool wait)
     }
 }
 
+bool loadImage(const std::string& path, cv::Mat& dst)
+{
+    cv::Mat img = cv::imread(path, CV_LOAD_IMAGE_COLOR);
+    if (img.cols > img.rows)
+        img = img.t();
+
+    if (!img.data) {
+        qDebug() << "Could not load" << path.c_str();
+        return false;
+    }
+
+    cv::resize(img, dst, cv::Size(IMG_WIDTH, IMG_HEIGHT));
+    if (!dst.data) {
+        qDebug() << "Could not resize" << path.c_str();
+        return false;
+    }
+    return true;
+}
+
+
 }

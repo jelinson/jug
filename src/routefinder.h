@@ -6,19 +6,20 @@
 #include <opencv/cv.h>
 #include <opencv/highgui.h>
 #include <opencv2/imgproc/imgproc.hpp>
+#include "grip.h"
 #include "utils.h"
 #include "globals.h"
+
+typedef std::vector<Grip> Route;
 
 class RouteFinder
 {
 public:
     RouteFinder();
     ~RouteFinder();
-    void find(cv::Mat *img, const std::string& imgPath, bool show=false);
-    void showRoute(const std::string& imgPath);
+    Route find(cv::Mat *img);
 
 private:
-    void detectRoute();
     void splitHSV();
     void getRouteHue();
     void denoise();

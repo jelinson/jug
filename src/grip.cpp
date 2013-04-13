@@ -3,7 +3,7 @@
 using namespace std;
 using namespace cv;
 
-Grip::Grip(cv::Mat *img, vector<cPoint> &contour)
+Grip::Grip(Mat *img, vector<Point> &contour)
     : _img(img),
       _contour(contour)
 {
@@ -11,7 +11,7 @@ Grip::Grip(cv::Mat *img, vector<cPoint> &contour)
     analyze();
 }
 
-Grip::Grip(cv::Mat *img, std::vector<Point> &contour, Rect &boundingRect)
+Grip::Grip(Mat *img, vector<Point> &contour, Rect &boundingRect)
     : _img(img),
       _contour(contour),
       _boundingRect(boundingRect)
@@ -27,8 +27,8 @@ void Grip::analyze()
     _perimeter = arcLength(_contour, true);
 
     vector<int> hull;
-    convexHull(_contour, &hull);
-    convexityDefects(_contour, &hull, &_defects);
+    convexHull(_contour, hull);
+    convexityDefects(_contour, hull, _defects);
 }
 
 

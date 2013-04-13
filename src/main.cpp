@@ -1,6 +1,7 @@
 #include <string>
 #include <QDir>
 #include "routefinder.h"
+#include "grip.h"
 #include "utils.h"
 
 void processArgs(int argc, char* argv[], std::string* inPath, std::string* outPath)
@@ -27,6 +28,6 @@ int main(int argc, char* argv[])
         qFatal("Aborting");
 
     RouteFinder rf;
-    rf.find(&img, inPath, false);
+    Route route = rf.find(&img);
     return 0;
 }

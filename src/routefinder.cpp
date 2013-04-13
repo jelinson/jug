@@ -102,6 +102,7 @@ void RouteFinder::detectRoute()
 
     vector<Rect> enclosingRect;
     int selectionIndex = -1;
+    /// use pointPolygonTest
     for (int i = 0; i < contours.size(); ++i) {
         enclosingRect.push_back(minAreaRect(contours[i]).boundingRect());
         if (enclosingRect[i].contains(Point(_routeXSelection,_routeYSelection))) {

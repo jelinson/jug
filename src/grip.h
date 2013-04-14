@@ -7,23 +7,26 @@
 #include "utils.h"
 #include "globals.h"
 
+typedef std::vector<cv::Point> Contour;
+
 class Grip
 {
 public:
-    Grip(cv::Mat *img, std::vector<cv::Point> &contour);
-    Grip(cv::Mat *img, std::vector<cv::Point> &contour, cv::Rect &boundingRect);
+    Grip(const Contour &contour);
+    Grip(const Contour &contour, const cv::Rect &boundingRect);
 
 private:
     void analyze();
 
-    cv::Mat *_img;
-    std::vector<cv::Point> _contour;
+    Contour _contour;
     cv::Rect _boundingRect;
     cv::Point _com;
     cv::Moments _moments;
     std::vector<cv::Vec4i> _defects;
     int _area;
     int _perimeter; /// \todo colon initialize
+
+    friend class Route;
 };
 
 #endif // GRIP_H

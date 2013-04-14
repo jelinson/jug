@@ -6,11 +6,10 @@
 #include <opencv/cv.h>
 #include <opencv/highgui.h>
 #include <opencv2/imgproc/imgproc.hpp>
+#include "route.h"
 #include "grip.h"
 #include "utils.h"
 #include "globals.h"
-
-typedef std::vector<Grip> Route;
 
 class RouteFinder
 {

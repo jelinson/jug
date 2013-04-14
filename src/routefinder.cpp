@@ -56,14 +56,10 @@ Route RouteFinder::find(Mat* img)
     qDebug() << "Found" << contours.size() << "contours";
     jug::showImage(&drawing, "Contours", true);
 
-    Route grips;
-    grips.reserve(contours.size());
-    for (int i = 0; i < contours.size(); ++i) {
-        Grip grip(_img, contours[i]);
-        grips.push_back(grip);
-    }
+    Route r(_img);
+    r.loadFromContours(contours);
 
-    return grips;
+    return r;
 
 //    vector<Rect> enclosingRect;
 //    int selectionIndex = -1;
@@ -75,8 +71,6 @@ Route RouteFinder::find(Mat* img)
 //            qDebug() << "Match at" << i;
 //        }
 //    }
-
-
 }
 
 void RouteFinder::splitHSV()

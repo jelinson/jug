@@ -29,5 +29,6 @@ int main(int argc, char* argv[])
 
     RouteFinder rf;
     Route route = rf.find(&img);
+    route.analyzeGrips();
     return 0;
 }

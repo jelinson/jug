@@ -3,20 +3,17 @@
 using namespace std;
 using namespace cv;
 
-Grip::Grip(Mat *img, vector<Point> &contour)
-    : _img(img),
-      _contour(contour)
+Grip::Grip(const Contour &contour)
+    : _contour(contour)
 {
     _boundingRect = minAreaRect(_contour).boundingRect();
-    analyze();
 }
 
-Grip::Grip(Mat *img, vector<Point> &contour, Rect &boundingRect)
-    : _img(img),
-      _contour(contour),
+Grip::Grip(const Contour &contour, const Rect &boundingRect)
+    : _contour(contour),
       _boundingRect(boundingRect)
 {
-    analyze();
+    // Nothing to do
 }
 
 void Grip::analyze()

@@ -2,6 +2,7 @@
 #define ROUTE_H
 
 #include <vector>
+#include <iostream>
 #include <QDebug>
 #include <opencv/cv.h>
 #include "grip.h"

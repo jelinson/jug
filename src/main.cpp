@@ -1,5 +1,6 @@
 #include <string>
 #include <QDir>
+#include <QDebug>
 #include "routefinder.h"
 #include "grip.h"
 #include "utils.h"

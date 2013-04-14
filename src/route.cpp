@@ -13,10 +13,8 @@ void Route::loadFromContours(const std::vector<Contour> &contours)
 {
     _grips.reserve(contours.size());
 
-    for (int i = 0; i < contours.size(); ++i) {
-        Grip g(contours[i]);
-        _grips.push_back(g);
-    }
+    for (int i = 0; i < contours.size(); ++i)
+        _grips.push_back(Grip(contours[i]));
 }
 
 void Route::analyzeGrips()

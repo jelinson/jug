@@ -4,6 +4,7 @@
 #include <vector>
 #include <QDebug>
 #include <opencv/cv.h>
+#include "geometry.h"
 #include "utils.h"
 #include "globals.h"
 
@@ -27,7 +28,8 @@ private:
     cv::Point _com;
     cv::Moments _moments;
     std::vector<cv::Vec4i> _defects;
-    int _area;
+    NormalField _nf;
+    double _area;
     int _perimeter; /// \todo colon initialize
 
     friend class Route;

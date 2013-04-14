@@ -14,6 +14,10 @@ class Grip
 public:
     Grip(const Contour &contour);
     Grip(const Contour &contour, const cv::Rect &boundingRect);
+    inline Contour getContour() const
+    {
+        return _contour;
+    }
 
 private:
     void analyze();

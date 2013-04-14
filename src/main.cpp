@@ -29,6 +29,9 @@ int main(int argc, char* argv[])
 
     RouteFinder rf;
     Route route = rf.find(&img);
+    cv::destroyAllWindows();
+
     route.analyzeGrips();
+    route.visualize();
     return 0;
 }

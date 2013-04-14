@@ -14,6 +14,7 @@ public:
     Route(cv::Mat *img);
     void loadFromContours(const std::vector<Contour> &contours);
     void analyzeGrips();
+    void visualize();
 
 private:
     cv::Mat *_img;

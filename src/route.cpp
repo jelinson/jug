@@ -21,6 +21,13 @@ void Route::loadFromContours(const std::vector<Contour> &contours)
 
 void Route::analyzeGrips()
 {
-    for (int i = 0; i < _grips.size(); ++i)
+    for (int i = 0; i < _grips.size(); ++i) {
         _grips[i].analyze();
+        qDebug() << _grips[i];
+    }
+}
+
+void Route::visualize()
+{
+
 }

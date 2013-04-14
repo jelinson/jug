@@ -20,12 +20,22 @@ void Grip::analyze()
 {
     _moments = moments(_contour);
     _area = contourArea(_contour);
-    _com = Point(_moments.m01/_area, _moments.m10/_area);
+    _com = Point(_moments.m10/_area, _moments.m01/_area);
     _perimeter = arcLength(_contour, true);
 
     vector<int> hull;
     convexHull(_contour, hull);
-    convexityDefects(_contour, hull, _defects);
+    if (hull.size() > 3)
+        convexityDefects(_contour, hull, _defects);
 }
 
-
+QDebug operator<<(QDebug d, const Grip &g)
+{
+    d.nospace() << "Grip: (x: "
+                << g._com.x << ", y: "
+                << g._com.y << ", area: "
+                << g._area << ", perm: "
+                << g._perimeter << ", ndef: "
+                << g._defects.size();
+    return d.space();
+}

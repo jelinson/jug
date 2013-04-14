@@ -27,6 +27,9 @@ private:
     int _perimeter; /// \todo colon initialize
 
     friend class Route;
+    friend QDebug operator<<(QDebug, const Grip&);
 };
+
+QDebug operator<<(QDebug d, const Grip &g);
 
 #endif // GRIP_H

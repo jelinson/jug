@@ -7,7 +7,7 @@
 #include "utils.h"
 #include "globals.h"
 
-#define SLOPE_DOMAIN 5
+#define SLOPE_RANGE 5
 
 class NormalField;
 typedef std::vector<cv::Point> Contour;
@@ -32,7 +32,8 @@ public:
     int lookUp(const cv::Point &slope);
 
 private:
-    int _counts[SLOPE_DOMAIN][SLOPE_DOMAIN];
+    int _counts[SLOPE_RANGE][SLOPE_RANGE];
+    static const int _offset;
 
     friend QDebug operator<<(QDebug dbg, const NormalField &nf);
 };

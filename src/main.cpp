@@ -6,7 +6,7 @@
 #include "geometry.h"
 #include "utils.h"
 
-#define TEST_MODE 1
+#define TEST_MODE 0
 
 void processArgs(int argc, char* argv[], std::string* inPath, std::string* outPath)
 {

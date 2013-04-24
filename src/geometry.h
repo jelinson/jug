@@ -16,6 +16,7 @@ class Geometry
 {
 public:
     static NormalField countNormals(const Contour &contour, bool ccw=true);
+    static void testNormals();
 
 private:
     static cv::Point normal(const cv::Point &previous,

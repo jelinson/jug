@@ -16,10 +16,14 @@ NormalField Geometry::countNormals(const Contour &contour, bool ccw)
     return nf;
 }
 
+/*
+ * 90 degree rotation of slope (270 if !ccw)
+ */
 Point Geometry::normal(const Point &previous, const Point &next, bool ccw)
 {
+    qDebug() << previous << next;
     Point diff = next - previous;
-    Point normal(diff.y, -(diff.x));
+    Point normal(-diff.y, diff.x);
     if (ccw)
         return normal;
     else
@@ -35,6 +39,7 @@ NormalField::NormalField()
 
 void NormalField::add(const Point &slope)
 {
+    qDebug() << "Slope" << slope;
     int offset = SLOPE_DOMAIN / 2;
     Q_ASSERT(slope.x+offset >= 0 && slope.x+offset < SLOPE_DOMAIN);
     Q_ASSERT(slope.y+offset >= 0 && slope.y+offset < SLOPE_DOMAIN);
@@ -45,6 +50,20 @@ void NormalField::add(const Point &slope)
 int NormalField::lookUp(const Point &slope)
 {
     return _counts[slope.x][slope.y];
+}
+
+void Geometry::testNormals()
+{
+    Contour square;
+    square.push_back(Point(0,0));
+    square.push_back(Point(0,1));
+    square.push_back(Point(0,2));
+    square.push_back(Point(0,3));
+    square.push_back(Point(1,3));
+    square.push_back(Point(1,2));
+    square.push_back(Point(1,1));
+    square.push_back(Point(1,0));
+    qDebug() << "Square\n" << countNormals(square);
 }
 
 QDebug operator<<(QDebug dbg, const NormalField &nf)

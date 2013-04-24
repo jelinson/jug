@@ -3,7 +3,10 @@
 #include <QDebug>
 #include "routefinder.h"
 #include "grip.h"
+#include "geometry.h"
 #include "utils.h"
+
+#define TEST_MODE 1
 
 void processArgs(int argc, char* argv[], std::string* inPath, std::string* outPath)
 {
@@ -20,6 +23,9 @@ void processArgs(int argc, char* argv[], std::string* inPath, std::string* outPa
 
 int main(int argc, char* argv[])
 {
+#if TEST_MODE
+    Geometry::testNormals();
+#else
     std::string inPath, outPath;
     processArgs(argc, argv, &inPath, &outPath);
 
@@ -35,4 +41,5 @@ int main(int argc, char* argv[])
     route.analyzeGrips();
     route.visualize();
     return 0;
+#endif
 }

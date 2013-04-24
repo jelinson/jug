@@ -4,6 +4,7 @@
 #include <vector>
 #include <QDebug>
 #include <opencv/cv.h>
+#include <opencv2/imgproc/imgproc.hpp>
 #include "geometry.h"
 #include "utils.h"
 #include "globals.h"

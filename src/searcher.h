@@ -1,23 +1,23 @@
 #ifndef SEARCHER_H
 #define SEARCHER_H
 
+#include <QList>
 #include <QQueue>
 #include <QMap>
-#include "abstractproblemstate.h"
-#include "abstractsearchproblem.h"
+#include "abstractproblem.h"
 
+template<typename State>
 class Searcher
 {
 public:
-    Searcher(AbstractSearchProblem* problem);
-    QList<AbstractProblemState> bfs();
+    static typename QList<State>::State bfs(AbstractProblem<State>* problem);
 
 private:
-    QList<AbstractProblemState> constructPath(AbstractProblemState last);
-
-    AbstractSearchProblem* _problem;
-    QQueue<AbstractProblemState> _frontier;
-    QMap<AbstractProblemState, AbstractProblemState> _moves;
+    static QList<State> constructPath(const State& last,
+                                      const State& start,
+                                      const QMap<State, State>& );
 };
+
+#include "searcher_p.h"
 
 #endif // SEARCHER_H

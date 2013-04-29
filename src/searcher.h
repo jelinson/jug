@@ -2,22 +2,21 @@
 #define SEARCHER_H
 
 #include <QList>
-#include <QQueue>
 #include <QMap>
-#include "abstractproblem.h"
+#include "climberstate.h"
+#include "pathproblem.h"
 
-template<typename State>
+
 class Searcher
 {
 public:
-    static typename QList<State>::State bfs(AbstractProblem<State>* problem);
+    Searcher();
+    QList<ClimberState> bfs(PathProblem& p);
 
 private:
-    static QList<State> constructPath(const State& last,
-                                      const State& start,
-                                      const QMap<State, State>& );
+    QList<ClimberState> recoverPath(const ClimberState& end,
+                                    const ClimberState& start,
+                                    const QMap<ClimberState, ClimberState>& moves);
 };
-
-#include "searcher_p.h"
 
 #endif // SEARCHER_H

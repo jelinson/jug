@@ -2,29 +2,23 @@
 #define PATHPROBLEM_H
 
 #include <QList>
-#include "abstractproblem.h"
 #include "climberstate.h"
-#include "route.h"
+#include "physics.h"
 
-template<typename T>
-class PathProblem : public AbstractProblem<T>
-{
-
-};
-
-template <>
-class PathProblem<ClimberState> : public AbstractProblem<ClimberState>
+class PathProblem
 {
 public:
-    PathProblem(Route toSolve) : _route(toSolve) {}
-    virtual ClimberState start() const { return ClimberState(); }
-    virtual QList<ClimberState> expand(const ClimberState &current) const
-    { return QList<ClimberState>(); }
-    virtual bool isGoal(const ClimberState &current) const { return false; }
-private:
-    Route _route;
-};
+    PathProblem(const ClimberState& start, int nGrips, int lastGrip);
+    void setEngine(const Physics* engine);
+    ClimberState start() const;
+    QList<ClimberState> expand(const ClimberState& current);
+    bool isGoal(const ClimberState& current);
 
-#include "pathproblem_p.h"
+private:
+    const ClimberState _start;
+    int _nGrips;
+    int _goal;
+    const Physics* _engine;
+};
 
 #endif // PATHPROBLEM_H

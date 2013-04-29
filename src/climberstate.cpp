@@ -18,8 +18,54 @@ ClimberState::ClimberState(int lh, int rh, int lf, int rf, Point com)
     _limbGrips[RightFoot] = rf;
 }
 
-void ClimberState::move(ClimberState::Limb l, int grip, Point com)
+ClimberState::ClimberState(const ClimberState &other)
+    : _com(other._com)
 {
-    _limbGrips[l] = grip;
+    for (int i = 0; i < N_LIMBS; ++i)
+        _limbGrips[i] = other._limbGrips[i];
+}
+
+ClimberState ClimberState::move(ClimberState::Limb l, int grip) const
+{
+    ClimberState next = *this;
+    next._limbGrips[l] = grip;
+    return next;
+}
+
+bool ClimberState::handOn(int grip) const
+{
+    return _limbGrips[LeftHand] == grip || _limbGrips[RightHand] == grip;
+}
+
+bool ClimberState::isEquivalent(const ClimberState &other) const
+{
+    bool flag = (_com == other._com);
+    for (int i = 0; i < N_LIMBS; ++i)
+        flag = flag & (_limbGrips[i] == other._limbGrips[i]);
+    return flag;
+}
+
+bool ClimberState::compare(const ClimberState &a, const ClimberState &b)
+{
+    return a._com.y > b._com.y;
+}
+
+void ClimberState::setCenter(const Point &com)
+{
     _com = com;
+}
+
+bool operator==(const ClimberState& a, const ClimberState& b)
+{
+    return a.isEquivalent(b);
+}
+
+bool operator!=(const ClimberState& a, const ClimberState& b)
+{
+    return !(a == b);
+}
+
+bool operator<(const ClimberState& a, const ClimberState& b)
+{
+    return ClimberState::compare(a, b);
 }

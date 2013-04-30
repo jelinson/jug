@@ -11,10 +11,10 @@ class Searcher
 {
 public:
     Searcher();
-    QList<ClimberState> bfs(PathProblem& p);
+    Path bfs(PathProblem& p);
 
 private:
-    QList<ClimberState> recoverPath(const ClimberState& end,
+    Path recoverPath(const ClimberState& end,
                                     const ClimberState& start,
                                     const QMap<ClimberState, ClimberState>& moves);
 };

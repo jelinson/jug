@@ -6,7 +6,7 @@ Searcher::Searcher()
 {
 }
 
-QList<ClimberState> Searcher::bfs(PathProblem &p)
+Path Searcher::bfs(PathProblem &p)
 {
     ClimberState start = p.start();
     QQueue<ClimberState> frontier;
@@ -28,20 +28,20 @@ QList<ClimberState> Searcher::bfs(PathProblem &p)
         }
     }
     qWarning() << "No solution path found";
-    return QList<ClimberState>();
+    return Path();
 }
 
-QList<ClimberState> Searcher::recoverPath(const ClimberState &end,
-                                          const ClimberState &start,
-                                          const QMap<ClimberState, ClimberState> &moves)
+Path Searcher::recoverPath(const ClimberState &end,
+                           const ClimberState &start,
+                           const QMap<ClimberState, ClimberState> &moves)
 {
-    QList<ClimberState> path;
+    Path p;
     ClimberState current = end;
     while (current != start) {
-        path.prepend(current);
+        p.prepend(current);
 
         Q_ASSERT(moves.contains(current));
         current = moves[current];
     }
-    return path;
+    return p;
 }

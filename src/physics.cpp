@@ -41,6 +41,10 @@ void Physics::fillInCom(ClimberState &state, Point com) const
     }
 }
 
+bool Physics::isReachableStart(const ClimberState &current)
+{
+
+}
 
 void Physics::loadRoute(const Route *r)
 {

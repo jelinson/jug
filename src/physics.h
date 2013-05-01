@@ -17,6 +17,7 @@ public:
     void loadClimber(const ClimberSpecs& specs);
     void loadRoute(const Route* r);
     void fillInCom(ClimberState &state, cv::Point com=cv::Point(-1, -1)) const;
+    bool isReachableStart(const ClimberState& current);
 
 private:
     const Route* _route;

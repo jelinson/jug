@@ -22,6 +22,8 @@ bool ClimberSpecs::ok(ClimberState::Limb l, int dist)
         return (armMin <= dist) && (dist <= armMax);
     else if (IS_LEG(l))
         return (legMin <= dist) && (dist <= legMax);
-    else
+    else {
         qWarning() << "Invalid limb";
+        return false;
+    }
 }

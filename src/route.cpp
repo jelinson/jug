@@ -34,25 +34,29 @@ void Route::analyzeGrips()
 void Route::visualize()
 {
     for (int i = 0; i < _grips.size(); ++i) {
-        Mat gripViewer = _img->clone();
-        if (!gripViewer.data) {
-            qFatal("Could not clone matrix");
-            continue;
-        }
+        Mat gripViewer = imgCopy();
 
         vector<Contour> contourWrapper(1, _grips[i]->getContour());
-        drawContours(gripViewer, contourWrapper, 0, Scalar(255), 2, 8);
+        drawContours(gripViewer, contourWrapper, 0, Scalar(255), 2);
         qDebug() << *(_grips[i]);
         jug::showImage(&gripViewer, "Route", true);
     }
 }
 
-int Route::nGrips()
+Mat Route::imgCopy() const
+{
+    Mat copy = _img->clone();
+    if (!copy.data)
+        qFatal("Could not clone matrix");
+    return copy;
+}
+
+int Route::nGrips() const
 {
     return _grips.size();
 }
 
-int Route::lastGrip()
+int Route::lastGrip() const
 {
     return _grips.size() - 1;
 }

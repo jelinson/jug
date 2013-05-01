@@ -19,7 +19,7 @@ public:
         RightFoot = 3
     };
 
-    int getGrip(Limb l);
+    int getGrip(Limb l) const;
     ClimberState move(Limb l, int grip) const;
     bool handOn(int grip) const;
     bool isEquivalent(const ClimberState& other) const;

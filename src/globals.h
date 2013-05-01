@@ -1,6 +1,7 @@
 #ifndef GLOBALS_H
 #define GLOBALS_H
 
+#include <QtDebug>
 #include <QDebug>
 
 #define IMG_WIDTH 428

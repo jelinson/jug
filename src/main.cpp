@@ -48,7 +48,7 @@ int main(int argc, char* argv[])
     Physics* engine = new Physics;
     ClimberSpecs spec;
     Climber c(spec, engine);
-    c.climb(route);
+    Path solution = c.climb(route);
 
     return 0;
 #endif

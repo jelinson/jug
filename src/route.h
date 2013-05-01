@@ -17,8 +17,9 @@ public:
     void loadFromContours(const std::vector<Contour> &contours);
     void analyzeGrips();
     void visualize();
-    int nGrips();
-    int lastGrip();
+    cv::Mat imgCopy() const;
+    int nGrips() const;
+    int lastGrip() const;
     const Grip* operator[](int i) const;
 
 private:

@@ -6,6 +6,8 @@
 #include "geometry.h"
 #include "utils.h"
 #include "pathproblem.h"
+#include "climber.h"
+#include "climberspecs.h"
 #include "searcher.h"
 
 #define TEST_MODE 0
@@ -40,12 +42,14 @@ int main(int argc, char* argv[])
     Route route = rf.find(&img);
     cv::destroyAllWindows();
 
-    //PathProblem p;
-    //Searcher s;
-    //s.bfs(p);
-
     route.analyzeGrips();
     route.visualize();
+
+    Physics* engine = new Physics;
+    ClimberSpecs spec;
+    Climber c(spec, engine);
+    c.climb(route);
+
     return 0;
 #endif
 }

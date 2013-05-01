@@ -2,8 +2,7 @@
 #define CLIMBERSTATE_H
 
 #include <opencv/cv.h>
-
-#define N_LIMBS 4
+#include "globals.h"
 
 class ClimberState
 {
@@ -19,6 +18,8 @@ public:
         LeftFoot = 2,
         RightFoot = 3
     };
+
+    int getGrip(Limb l);
     ClimberState move(Limb l, int grip) const;
     bool handOn(int grip) const;
     bool isEquivalent(const ClimberState& other) const;

@@ -2,7 +2,6 @@
 #define UTILS_H
 
 #include <string>
-#include <QDebug>
 #include <opencv/cv.h>
 #include <opencv/highgui.h>
 #include "globals.h"

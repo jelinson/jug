@@ -5,18 +5,19 @@
 #include <QMap>
 #include "climberstate.h"
 #include "pathproblem.h"
+#include "globals.h"
 
 
 class Searcher
 {
 public:
     Searcher();
-    Path bfs(PathProblem& p);
+    static Path bfs(PathProblem& p);
 
 private:
-    Path recoverPath(const ClimberState& end,
-                                    const ClimberState& start,
-                                    const QMap<ClimberState, ClimberState>& moves);
+    static Path recoverPath(const ClimberState& end,
+                            const ClimberState& start,
+                            const QMap<ClimberState, ClimberState>& moves);
 };
 
 #endif // SEARCHER_H

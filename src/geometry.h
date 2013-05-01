@@ -2,12 +2,9 @@
 #define GEOMETRY_H
 
 #include <vector>
-#include <QDebug>
 #include <opencv/cv.h>
 #include "utils.h"
 #include "globals.h"
-
-#define SLOPE_RANGE 5
 
 class NormalField;
 typedef std::vector<cv::Point> Contour;

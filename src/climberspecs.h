@@ -2,9 +2,11 @@
 #define CLIMBERSPECS_H
 
 #include "climberstate.h"
+#include "globals.h"
 
 struct ClimberSpecs {
-    ClimberSpecs(w, amin, amax, lmin, lmax);
+    ClimberSpecs();
+    ClimberSpecs(int w, int amin, int amax, int lmin, int lmax);
     bool ok(ClimberState::Limb l, int dist);
     int weight;
     int armMin, armMax;

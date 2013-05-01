@@ -44,3 +44,10 @@ QDebug operator<<(QDebug d, const Grip &g)
     qDebug() << g._nf;
     return d.space();
 }
+
+bool operator<(const Grip& a, const Grip& b)
+{
+    // smaller y values coresponds to higher in image and hence high in route
+    a.getCom().y > b.getCom().y;
+}
+

@@ -2,7 +2,6 @@
 #define GRIP_H
 
 #include <vector>
-#include <QDebug>
 #include <opencv/cv.h>
 #include <opencv2/imgproc/imgproc.hpp>
 #include "geometry.h"
@@ -19,6 +18,11 @@ public:
     inline Contour getContour() const
     {
         return _contour;
+    }
+
+    inline cv::Point getCom() const
+    {
+        return _com;
     }
 
 private:
@@ -38,5 +42,6 @@ private:
 };
 
 QDebug operator<<(QDebug d, const Grip &g);
+bool operator<(const Grip& a, const Grip& b);
 
 #endif // GRIP_H

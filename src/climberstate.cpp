@@ -25,6 +25,11 @@ ClimberState::ClimberState(const ClimberState &other)
         _limbGrips[i] = other._limbGrips[i];
 }
 
+int ClimberState::getGrip(ClimberState::Limb l)
+{
+    return _limbGrips[l];
+}
+
 ClimberState ClimberState::move(ClimberState::Limb l, int grip) const
 {
     ClimberState next = *this;

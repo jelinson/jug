@@ -5,6 +5,8 @@
 #include "pathproblem.h"
 #include "physics.h"
 #include "route.h"
+#include "searcher.h"
+#include "globals.h"
 
 class Climber
 {
@@ -15,6 +17,7 @@ public:
     void climb(Route& r, bool visualize=true);
 
 private:
+    ClimberState start(Route& r);
     void visualize(Route& r, Path& p);
 
     Physics *_engine;

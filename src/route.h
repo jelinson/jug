@@ -3,7 +3,7 @@
 
 #include <vector>
 #include <iostream>
-#include <QDebug>
+#include "algorithm"
 #include <opencv/cv.h>
 #include "grip.h"
 #include "utils.h"
@@ -13,13 +13,17 @@ class Route
 {
 public:
     Route(cv::Mat *img);
+    ~Route();
     void loadFromContours(const std::vector<Contour> &contours);
     void analyzeGrips();
     void visualize();
+    int nGrips();
+    int lastGrip();
+    const Grip* operator[](int i) const;
 
 private:
     cv::Mat *_img;
-    std::vector<Grip> _grips;
+    std::vector<Grip*> _grips;
 };
 
 #endif // ROUTE_H

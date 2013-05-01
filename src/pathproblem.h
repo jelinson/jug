@@ -4,6 +4,7 @@
 #include <QList>
 #include "climberstate.h"
 #include "physics.h"
+#include "globals.h"
 
 typedef QList<ClimberState> Path;
 

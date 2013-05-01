@@ -10,17 +10,21 @@
 
 class Physics
 {
+    friend class Climber;
+
 public:
     Physics();
     bool isPossible(const ClimberState& pos) const;
     QList<ClimberState> configurations(const ClimberState& pos) const;
-    void loadClimber(const ClimberSpecs &specs);
-    void loadRoute(const Route* r);
     bool isRouteLoaded() const;
-    void fillInCom(ClimberState &state, cv::Point com=cv::Point(-1, -1)) const;
-    bool isReachableStart(const ClimberState& pos);
+    void fillInCom(ClimberState &pos, cv::Point com=cv::Point(-1, -1)) const;
+    bool isReachableStart(const ClimberState& pos) const;
+    cv::Point geometricCenter(const ClimberState& pos) const;
 
 private:
+    void loadClimber(const ClimberSpecs &specs);
+    void loadRoute(const Route* r);
+
     const Route* _route;
     ClimberSpecs _specs;
 };

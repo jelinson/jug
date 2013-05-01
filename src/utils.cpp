@@ -6,6 +6,7 @@ static int x = 0;
 
 void showImage(const cv::Mat* img, const std::string& title, bool wait)
 {
+    Q_ASSERT(img->data);
     cv::namedWindow(title, cv::WINDOW_AUTOSIZE);
     cv::imshow(title, *img);
     cv::moveWindow(title, x, 0);

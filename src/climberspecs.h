@@ -7,6 +7,7 @@
 struct ClimberSpecs {
     ClimberSpecs();
     ClimberSpecs(int w, int amin, int amax, int lmin, int lmax);
+    void sanityCheck() const;
     bool ok(ClimberState::Limb l, int dist);
     int weight;
     int armMin, armMax;

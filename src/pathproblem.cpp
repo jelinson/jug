@@ -33,5 +33,6 @@ Path PathProblem::expand(const ClimberState &current)
 
 bool PathProblem::isGoal(const ClimberState &current)
 {
+    Q_ASSERT(_goal != -1);
     return current.handOn(_goal);
 }

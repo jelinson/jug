@@ -52,6 +52,8 @@ bool ClimberState::isEquivalent(const ClimberState &other) const
 
 bool ClimberState::compare(const ClimberState &a, const ClimberState &b)
 {
+    Q_ASSERT(a._com.y != -1);
+    Q_ASSERT(b._com.y != -1);
     return a._com.y > b._com.y;
 }
 

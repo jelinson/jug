@@ -20,6 +20,7 @@ void Grip::analyze()
 {
     _moments = moments(_contour);
     _area = contourArea(_contour, true);
+    Q_ASSERT(_area != 0);
     _com = Point(_moments.m10/abs(_area), _moments.m01/abs(_area));
     _perimeter = arcLength(_contour, true);
 
@@ -48,6 +49,5 @@ QDebug operator<<(QDebug d, const Grip &g)
 bool operator<(const Grip& a, const Grip& b)
 {
     // smaller y values coresponds to higher in image and hence high in route
-    a.getCom().y > b.getCom().y;
+    return a.getCom().y > b.getCom().y;
 }
-

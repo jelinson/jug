@@ -26,6 +26,8 @@ void Climber::setEngine(Physics *engine)
 
 Path Climber::climb(const Route &r, bool visualize) const
 {
+    Q_ASSERT(r.nGrips() > N_LIMBS);
+
     _engine->loadRoute(&r);
     QList<ClimberState> possibleStarts = start(r);
 
@@ -33,14 +35,13 @@ Path Climber::climb(const Route &r, bool visualize) const
         PathProblem problem(start, r.nGrips(), r.lastGrip());
         Path solution =  Searcher::bfs(problem);
         if (!solution.isEmpty()) {
-            if (visualize) {
+            if (visualize)
                 visualizePath(r, solution);
-            }
             return solution;
         }
     }
 
-    qDebug() << "Could not find solution";
+    qDebug() << "Could not find a solution";
     return Path();
 }
 
@@ -75,11 +76,14 @@ QList<ClimberState> Climber::start(const Route &r) const
 
 void Climber::visualizePath(const Route &r, const Path &p) const
 {
-    for (int i = 0; i < r.nGrips(); ++i) {
+    for (int i = 0; i < p.size(); ++i) {
         Mat stateViewer = r.imgCopy();
+        Q_ASSERT(stateViewer.data);
+
         drawState(stateViewer, r, p[i]);
         QString imgName("Move");
         imgName.append(QString::number(i));
+
         jug::showImage(&stateViewer, imgName.toStdString(), true);
     }
 }
@@ -88,7 +92,10 @@ void Climber::drawState(cv::Mat &img, const Route &r, const ClimberState s) cons
 {
     for (int i = 0; i < N_LIMBS; ++i) {
         int gripIndex = s.getGrip((ClimberState::Limb) i);
-        vector<Contour> contourWrapper(1, r[gripIndex]->getContour());
-        drawContours(img, contourWrapper, 0, limbColors[i], 2);
+        if (gripIndex != -1) {
+            Q_ASSERT(gripIndex < r.nGrips());
+            vector<Contour> contourWrapper(1, r[gripIndex]->getContour());
+            drawContours(img, contourWrapper, 0, limbColors[i], 2);
+        }
     }
 }

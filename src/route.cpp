@@ -35,9 +35,11 @@ void Route::visualize()
 {
     for (int i = 0; i < _grips.size(); ++i) {
         Mat gripViewer = imgCopy();
+        Q_ASSERT(gripViewer.data);
 
         vector<Contour> contourWrapper(1, _grips[i]->getContour());
         drawContours(gripViewer, contourWrapper, 0, Scalar(255), 2);
+
         qDebug() << *(_grips[i]);
         jug::showImage(&gripViewer, "Route", true);
     }
@@ -58,6 +60,7 @@ int Route::nGrips() const
 
 int Route::lastGrip() const
 {
+    Q_ASSERT(_grips.size() != 0);
     return _grips.size() - 1;
 }
 

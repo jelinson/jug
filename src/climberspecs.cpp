@@ -7,17 +7,27 @@ ClimberSpecs::ClimberSpecs()
       legMin(CS_LIMB_MIN),
       legMax(CS_LIMB_MAX)
 {
-    // nothing to do
+    sanityCheck();
 }
 
 ClimberSpecs::ClimberSpecs(int w, int amin, int amax, int lmin, int lmax)
     : weight(w), armMin(amin), armMax(amax), legMin(lmin), legMax(lmax)
 {
-    // nothing to do
+    sanityCheck();
+}
+
+void ClimberSpecs::sanityCheck() const
+{
+    Q_ASSERT(weight >= 0);
+    Q_ASSERT(armMin >= 0);
+    Q_ASSERT(armMax >= 0);
+    Q_ASSERT(legMin >= 0);
+    Q_ASSERT(legMax >= 0);
 }
 
 bool ClimberSpecs::ok(ClimberState::Limb l, int dist)
 {
+    Q_ASSERT(dist >= 0);
     if (IS_ARM(l))
         return (armMin <= dist) && (dist <= armMax);
     else if (IS_LEG(l))

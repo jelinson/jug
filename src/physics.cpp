@@ -27,6 +27,7 @@ bool Physics::isPossible(const ClimberState &pos) const
 
 
 
+
     return true;
 }
 
@@ -113,6 +114,15 @@ bool Physics::analyzeForces(const ClimberState &pos) const
 void Physics::loadRoute(const Route *r)
 {
     _route = r;
+}
+
+bool Physics::checkCrossed(int lIndex, int rIndex)
+{
+    if (lIndex == -1 || rIndex == -1)
+        return false;
+
+    int lx = (*_route)[lIndex]->getCom().x;
+    int rx = (*_route)[rIndex]->getCom().x;
 }
 
 bool Physics::isRouteLoaded() const

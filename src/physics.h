@@ -25,6 +25,7 @@ public:
 private:
     void loadClimber(const ClimberSpecs &specs);
     void loadRoute(const Route* r);
+    bool checkCrossed(int lIndex, int rIndex);
 
     const Route* _route;
     ClimberSpecs _specs;

@@ -5,6 +5,7 @@ using namespace cv;
 Physics::Physics()
     : _route(NULL)
 {
+    // nothing to do
 }
 
 bool Physics::isPossible(const ClimberState &pos) const
@@ -12,6 +13,7 @@ bool Physics::isPossible(const ClimberState &pos) const
     Q_ASSERT(isRouteLoaded());
     Point avg = geometricCenter(pos);
 
+    // check distances
     for (int i = 0; i < N_LIMBS; ++i) {
         int gripIndex = pos.getGrip((ClimberState::Limb) i);
         Point diff = (*_route)[gripIndex]->getCom() - avg;
@@ -21,13 +23,31 @@ bool Physics::isPossible(const ClimberState &pos) const
             return false;
     }
 
+    // check limb crossing
+
+
+
     return true;
 }
 
 QList<ClimberState> Physics::configurations(const ClimberState &pos) const
 {
     Q_ASSERT(isRouteLoaded());
-    return QList<ClimberState>();
+
+    QList<ClimberState> viableConfig;
+    Point avg = geometricCenter(pos);
+
+    for (int x = -LATTICE_DIM; x <= LATTICE_DIM; ++x) {
+        for (int y = -LATTICE_DIM; y <= LATTICE_DIM; ++y) {
+            Point adjCom = avg + Point(x * LATTICE_SPACING, y * LATTICE_SPACING);
+            ClimberState adjPos = pos;
+            adjPos.setCenter(adjCom);
+            if (jug::validPoint(adjCom) && analyzeForces(adjPos))
+                viableConfig.append(adjPos);
+        }
+    }
+
+    return viableConfig;
 }
 
 void Physics::loadClimber(const ClimberSpecs &specs)
@@ -80,6 +100,14 @@ Point Physics::geometricCenter(const ClimberState &pos) const
     avg.x /= (N_LIMBS - smudges);
     avg.y /= (N_LIMBS - smudges);
     return avg;
+}
+
+bool Physics::analyzeForces(const ClimberState &pos) const
+{
+    Q_ASSERT(isRouteLoaded());
+
+
+    return false;
 }
 
 void Physics::loadRoute(const Route *r)

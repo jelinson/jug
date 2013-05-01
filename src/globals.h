@@ -23,4 +23,7 @@
 #define IS_ARM(x) ((x == 0) || (x == 1))
 #define IS_LEG(x) ((x == 2) || (x == 3))
 
+#define LATTICE_SPACING 10
+#define LATTICE_DIM 4
+
 #endif // GLOBALS_H

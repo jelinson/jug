@@ -37,7 +37,7 @@ Route RouteFinder::find(Mat* img)
     splitHSV();
     getRouteHue();
 
-    jug::showImage(&_hsvChannels[0], "Hue", true);
+    //jug::showImage(&_hsvChannels[0], "Hue", true);
 
     Mat hueMask, satMask;
     inRange(_hsvChannels[0], Scalar(_routeHue - HUE_MARGIN), Scalar(_routeHue + HUE_MARGIN), hueMask);
@@ -45,10 +45,10 @@ Route RouteFinder::find(Mat* img)
 
     bitwise_and(hueMask, satMask, _routeMask);
 
-    jug::showImage(&_routeMask,"sdf",true);
+    //jug::showImage(&_routeMask,"sdf",true);
 
     denoise();
-    jug::showImage(&_routeMask, "Route");
+    //jug::showImage(&_routeMask, "Route");
 
     /// \todo for each blob, check mean rgb and proxity to given input
     /// \todo look for nested contours with hierarchy argument

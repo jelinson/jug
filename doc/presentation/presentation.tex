@@ -56,7 +56,7 @@ Challenges
 \end{itemize}
 \pause
 \vspace{.3cm}
-Constraints
+Scope Constraints
 \begin{itemize}
  \item Motion in 2D plane -- no overhang
  \item Depth correlated to grip size
@@ -198,19 +198,20 @@ Orientation Estimation
 \section{Heuristic Analysis}
 \begin{frame}[t]{Grip Heuristics}
 \pause
-Binary Criteria
+Binary Criteria:
 \begin{itemize}
  \item Can it support a hand or just a foot?
  \item Can it support two limbs?
 \end{itemize}
 \pause
 \vspace{.3cm}
-Continuous Variables
+Force as a Continuous Variable:
 $$
 F = f(a, p, d, N, \theta)
 $$
 where $a$ is area, $p$ is perimeter, $d$ are the convexity defects, $N$ is the normal field, and $\theta$ is the angle at which the grip is grabbed.\\
 \pause
+\vspace{.3cm}
 As an approximation, 
 $$
 F = a \cdot N[\theta] + \text{hardlim}(d) \cdot |d|.
@@ -218,19 +219,90 @@ $$
 \end{frame}
 
 \section{Physics Engine}
-\begin{frame}
- crap
+\begin{frame}[t]{Physics Engine}
+Modeling a Human
+\begin{itemize}
+ \item 4 point mass limbs
+ \item A center of mass, which is not necessarily the geometric center of limbs
+ \item Limbs have minimum and maximum distances from center
+\end{itemize}
+
+\pause
+\vspace{.3cm}
+\alert{Challenge is exploring possibilities for the center of mass.}
+\end{frame}
+
+\begin{frame}{Center of Mass}
+\begin{center}
+ \includegraphics<1>[width=.7\linewidth]{img/pos.jpg}
+ \includegraphics<2>[width=.7\linewidth]{img/centers.jpg}
+ \end{center}
 \end{frame}
 
 \section{Path Search}
-\begin{frame}
- crap
+\begin{frame}[t]{Search}
+Constraints
+\begin{itemize}
+ \item Move one limb at a time
+ \item Configuration should be reasonable
+ \item Analyze forces and ensure the grips can support the climber
+\end{itemize}
+
+\pause
+\vspace{.2cm}
+Exploration
+\begin{itemize}
+ \item Allow limbs to be on no grips or to share
+ \item Assign strain for each move and for distance of the move
+ \item Cost function to minimize strain and maximize height
+\end{itemize}
+
+\pause
+\vspace{.2cm}
+Starting
+\begin{itemize}
+ \item Search permutations of 4 lowest grips for viable position
+ \item Search higher if necessary, provided it can be reached from the ground
+\end{itemize}
+
 \end{frame}
 
 
 \section{Progress}
-\begin{frame}
- crap
+\begin{frame}[T]{Progress}
+
+\pause
+\begin{block}{Image Processing}
+\begin{itemize}
+ \item Route Detection
+ \item Grip Analysis
+\end{itemize}
+\end{block}
+
+
+\begin{block}{Heuristic Analysis}
+\begin{itemize}
+ \item \alert{Modeling Grip Support}
+\end{itemize}
+\end{block}
+
+
+\begin{block}{Physics Engine}
+\begin{itemize}
+ \item Modeling a Human
+ \item Simulation Motion
+\end{itemize}
+\end{block}
+
+
+\begin{block}{Path Search}
+\begin{itemize}
+ \item Starting a Route
+ \item BFS \& \alert{A$^*$}
+\end{itemize}
+\end{block}
+
 \end{frame}
+
 
 \end{document}

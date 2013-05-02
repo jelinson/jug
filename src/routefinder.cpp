@@ -37,11 +37,16 @@ Route RouteFinder::find(Mat* img)
     splitHSV();
     getRouteHue();
 
+    jug::showImage(&_hsvChannels[0], "Hue", true);
+
     Mat hueMask, satMask;
     inRange(_hsvChannels[0], Scalar(_routeHue - HUE_MARGIN), Scalar(_routeHue + HUE_MARGIN), hueMask);
     inRange(_hsvChannels[1], _minSatThres, _maxSatThres, satMask);
 
     bitwise_and(hueMask, satMask, _routeMask);
+
+    jug::showImage(&_routeMask,"sdf",true);
+
     denoise();
     jug::showImage(&_routeMask, "Route");
 

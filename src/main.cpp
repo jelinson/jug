@@ -22,7 +22,7 @@ void processArgs(int argc, char* argv[], std::string* inPath, std::string* outPa
             *outPath = "../img/output";
     }
     else
-        *inPath = "../img/input/test1.JPG";
+        *inPath = "../img/input/test2.JPG";
 }
 
 int main(int argc, char* argv[])
@@ -45,10 +45,10 @@ int main(int argc, char* argv[])
     route.analyzeGrips();
     route.visualize();
 
-    Physics* engine = new Physics;
-    ClimberSpecs spec;
-    Climber c(spec, engine);
-    Path solution = c.climb(route);
+    //Physics* engine = new Physics;
+    //ClimberSpecs spec;
+    //Climber c(spec, engine);
+    //Path solution = c.climb(route);
 
     return 0;
 #endif

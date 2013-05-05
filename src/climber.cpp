@@ -73,7 +73,7 @@ QList<ClimberState> Climber::start(const Route &r) const
 
         for (int j = 0; j < arrangements.length(); ++j) {
             qDebug() << "Testing" << arrangements[j];
-            visualizeState(r, arrangements[j]);
+            //visualizeState(r, arrangements[j]);
             if (_engine->isPossible(arrangements[j]) && _engine->isReachableStart(arrangements[j]))
                  foreach (ClimberState s, _engine->configurations(arrangements[j]))
                      feasibleStarts.append(s);

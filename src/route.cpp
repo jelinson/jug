@@ -25,10 +25,23 @@ void Route::loadFromContours(const vector<Contour> &contours)
 
 void Route::analyzeGrips()
 {
-    for (int i = 0; i < _grips.size(); ++i)
-        _grips[i]->analyze();
+    QList<vector<Grip*>::iterator> toRemove;
+    for (vector<Grip*>::iterator i = _grips.begin(); i != _grips.end(); ++i)
+        if (!(*i)->analyze())
+            toRemove.prepend(i);
 
-    sort(_grips.begin(), _grips.end());
+    for (int i = 0; i < toRemove.size(); ++i)
+        _grips.erase(toRemove[i]);
+
+    for (int i = 0; i < _grips.size(); ++i)
+        qDebug() << _grips[i]->getCom().y;
+
+    sort(_grips.begin(), _grips.end(), Grip::ptrComp);
+
+    qDebug() << endl;
+
+    for (int i = 0; i < _grips.size(); ++i)
+        qDebug() << _grips[i]->getCom().y;
 }
 
 void Route::visualize()

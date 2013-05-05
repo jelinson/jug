@@ -14,14 +14,12 @@ Path Searcher::bfs(PathProblem &p)
     QMap<ClimberState, ClimberState> moves;
 
     while (!frontier.isEmpty()) {
-        qDebug() << "while iteration";
         ClimberState current = frontier.dequeue();
 
         if (p.isGoal(current))
             return recoverPath(current, start, moves);
 
         QList<ClimberState> neighbors = p.expand(current);
-        qDebug() << "expanded with" << neighbors.size() << "neighbors";
         foreach (ClimberState next, neighbors) {
             if (!moves.contains(next) && !frontier.contains(next)) {
                 frontier.enqueue(next);

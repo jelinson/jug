@@ -28,8 +28,10 @@ public:
     bool handHold() const;
     bool nLimbs(int i) const;
 
+    static bool ptrComp(const Grip* a, const Grip* b);
+
 private:
-    void analyze();
+    bool analyze();
 
     Contour _contour;
     cv::Rect _boundingRect;

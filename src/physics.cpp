@@ -105,7 +105,6 @@ Point Physics::geometricCenter(const ClimberState &pos) const
 
 bool Physics::analyzeForces(const ClimberState &pos) const
 {
-    return true;
     Q_ASSERT(isRouteLoaded());
     Q_ASSERT(pos.getCom().x > -1 && pos.getCom().y > -1);
     ClimberCoordinates coord(pos, _route);
@@ -174,13 +173,13 @@ bool Physics::checkDistances(const ClimberCoordinates &coord, const Point &com) 
 bool Physics::checkLimbCrossing(const ClimberCoordinates &coord) const
 {
     // check limb crossing
-    if (coord[LeftArm].x > coord[RightArm].x + CS_LIMB_MIN) {
+    if (coord[LeftArm].x > coord[RightArm].x + CS_LIMB_CROSS_OVER) {
         if (DEBUG_LEVEL >= VERBOSE)
             qDebug() << "The hands were crossed";
         return false;
     }
 
-    if (coord[LeftLeg].x > coord[RightLeg].x + CS_LIMB_MIN) {
+    if (coord[LeftLeg].x > coord[RightLeg].x + CS_LIMB_CROSS_OVER) {
         if (DEBUG_LEVEL >= VERBOSE)
             qDebug() << "The legs were crossed";
         return false;
@@ -235,8 +234,13 @@ bool Physics::checkLimbsPerGrip(const ClimberState &pos, const ClimberCoordinate
 
 bool Physics::compareForces(const Point &gravity, const Point &support) const
 {
-    return -support.y >= gravity.y &&
-            abs(support.x + gravity.x) <= LATERAL_SELF_BALANCE;
+    bool side = gravity.x == 0;
+    side |= abs(support.x + gravity.x) <= LATERAL_SELF_BALANCE;
+    side |= support.x < 0 && gravity.x > 0;
+    side |= support.x > 0 && gravity.x < 0;
+    side |= gravity.x < LATERAL_SELF_BALANCE;
+
+    return -support.y >= gravity.y && side;
 }
 
 bool Physics::isRouteLoaded() const

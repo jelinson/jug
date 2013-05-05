@@ -23,7 +23,7 @@ void processArgs(int argc, char* argv[], std::string* inPath, std::string* outPa
             *outPath = "../img/output";
     }
     else
-        *inPath = "../img/input/test1.JPG";
+        *inPath = "../img/input/test2.JPG";
 }
 
 int main(int argc, char* argv[])

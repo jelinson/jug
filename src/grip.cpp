@@ -29,11 +29,15 @@ bool Grip::nLimbs(int i) const
     return _perimeter >= i * MIN_PERIMETER_PER_LIMB;
 }
 
-void Grip::analyze()
+bool Grip::ptrComp(const Grip *a, const Grip *b)
+{
+    return *a < *b;
+}
+
+bool Grip::analyze()
 {
     _moments = moments(_contour);
     _area = contourArea(_contour, true);
-    Q_ASSERT(_area != 0);
     _com = Point(_moments.m10/abs(_area), _moments.m01/abs(_area));
     _perimeter = arcLength(_contour, true);
 
@@ -44,6 +48,9 @@ void Grip::analyze()
 
     if (_com.x >= 0 && _com.y >= 0)
         _nf = Geometry::countNormals(_contour, _area < 0);
+
+    // false means invalid
+    return _area != 0;
 }
 
 QDebug operator<<(QDebug d, const Grip &g)

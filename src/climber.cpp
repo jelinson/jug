@@ -78,6 +78,7 @@ QList<ClimberState> Climber::start(const Route &r) const
                  foreach (ClimberState s, _engine->configurations(arrangements[j]))
                      feasibleStarts.append(s);
         }
+        jug::clearImages();
 
         if (!feasibleStarts.empty())
             return feasibleStarts;

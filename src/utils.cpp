@@ -36,6 +36,12 @@ bool loadImage(const std::string& path, cv::Mat& dst)
     return true;
 }
 
+void clearImages()
+{
+    cv::destroyAllWindows();
+    x = 0;
+}
+
 bool validPoint(const cv::Point& pos)
 {
     return pos.x >= 0 && pos.y >= 0 && pos.x < IMG_WIDTH && pos.y < IMG_HEIGHT;

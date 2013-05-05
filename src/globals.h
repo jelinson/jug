@@ -23,7 +23,7 @@
 
 #define CS_WEIGHT 100
 #define CS_LIMB_MIN 25
-#define CS_LIMB_MAX 150
+#define CS_LIMB_MAX 175
 
 #define LATERAL_SELF_BALANCE 50
 #define AREA_FORCE_SCALING 5

@@ -101,6 +101,7 @@ void Physics::fillInCom(ClimberState &pos, Point com) const
 
 bool Physics::isReachableStart(const ClimberState &pos) const
 {
+    qDebug() << "isReachableStart in";
     Q_ASSERT(isRouteLoaded());
     ClimberCoordinates coord(pos, _route);
     bool b = jug::fromGround(coord.getGrip(LeftLeg)->getCom().y) < CS_LIMB_MAX &&
@@ -109,6 +110,7 @@ bool Physics::isReachableStart(const ClimberState &pos) const
     if (!b && DEBUG_LEVEL >= VERBOSE)
         qDebug() << "Position was not reachable";
 
+    qDebug() << "isReachableStart out";
     return b;
 }
 
@@ -154,16 +156,24 @@ bool Physics::analyzeForces(const ClimberState &pos) const
         support += gripForce;
     }
 
+    if (DEBUG_LEVEL >= VERBOSE && !compareForces(gravity, support))
+        qDebug() << "Force of gravity" << gravity<< "beat support" << support;
+
     return compareForces(gravity, support);
 }
 
 Point Physics::supportForce(const Grip *g, Limb l, Point slope) const
 {
     // feet push up
-    if (l == LeftLeg || RightLeg)
+    if (IS_LEG(l))
         slope = -1 * slope;
 
-    return slope * min(g->_nf.lookUp(slope), 1) * g->_area * AREA_FORCE_SCALING;
+    Point slopeFactor = slope * min(g->_nf.lookUp(slope), 1);
+    double areaCoeff = abs(g->_area) * AREA_FORCE_SCALING;
+    double perimeterCoeff = g->_perimeter * PERIMETER_FORCE_SCALING;
+    double defectCoeff = g->_defects.size() * DEFECTS_FORCE_SCALING;
+
+    return slopeFactor * (areaCoeff + perimeterCoeff + defectCoeff);
 }
 
 void Physics::loadRoute(const Route *r)

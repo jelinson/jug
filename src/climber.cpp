@@ -31,7 +31,8 @@ Path Climber::climb(const Route &r, bool visualize) const
     _engine->loadRoute(&r);
     QList<ClimberState> possibleStarts = start(r);
 
-    qDebug() << "Generated possible starts";
+    if (!possibleStarts.empty())
+        qDebug() << "Generated possible starts";
 
     foreach (ClimberState start, possibleStarts) {
         PathProblem problem(start, r.nGrips(), r.lastGrip());
@@ -53,7 +54,6 @@ QList<ClimberState> Climber::start(const Route &r) const
     QList<ClimberState> feasibleStarts;
     qDebug() << "Number of grips" << r.nGrips();
     while (i < r.nGrips() - 3) {
-        qDebug() << i;
         QList<ClimberState> arrangements;
 
         // assume lowest four are two hands and two feet, might need to swap them

@@ -33,19 +33,30 @@ int main(int argc, char* argv[])
     std::string inPath, outPath;
     processArgs(argc, argv, &inPath, &outPath);
 
+    if (DEBUG_LEVEL != QUIET)
+        qDebug() << "Loading image" << inPath.c_str();
+
     cv::Mat img;
     bool b = jug::loadImage(inPath, img);
     if (!b)
         qFatal("Aborting");
 
+    if (DEBUG_LEVEL != QUIET)
+        qDebug() << "Analyzing route";
+
     RouteFinder rf;
     Route route = rf.find(&img);
     route.analyzeGrips();
+    route.visualize();
     cv::destroyAllWindows();
 
     Physics* engine = new Physics;
     ClimberSpecs spec;
     Climber c(engine, spec);
+
+    if (DEBUG_LEVEL != QUIET)
+        qDebug() << "Searching for a path";
+
     Path solution = c.climb(route);
     return 0;
 #endif

@@ -51,7 +51,7 @@ int ClimberState::getGripIndex(Limb l) const
 
 int ClimberState::getGripIndex(int i) const
 {
-    return getGripIndex(i);
+    return getGripIndex((Limb) i);
 }
 
 ClimberState ClimberState::move(Limb l, int grip) const

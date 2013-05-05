@@ -21,7 +21,7 @@ Path PathProblem::expand(const ClimberState &current)
     QList<ClimberState> neighbors;
     for (int limb = 0; limb < N_LIMBS; ++limb) {
         for (int gripIndex = -1; gripIndex < _nGrips; ++gripIndex) {
-            ClimberState next = current.move((ClimberState::Limb) limb, gripIndex);
+            ClimberState next = current.move((Limb) limb, gripIndex);
 
             if (_engine->isPossible(next))
                 foreach (ClimberState nextConfig, _engine->configurations(next))

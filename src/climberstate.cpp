@@ -2,6 +2,25 @@
 
 using namespace cv;
 
+QDebug operator<<(QDebug db, Limb l)
+{
+    switch ((int) l) {
+    case (int) LeftArm:
+        db << "leg arm";
+        break;
+    case (int) RightArm:
+        db << "right arm";
+        break;
+    case (int) LeftLeg:
+        db << "left leg";
+        break;
+    case (int) RightLeg:
+        db << "right leg";
+        break;
+    }
+    return db;
+}
+
 ClimberState::ClimberState()
     : _com(-1, -1)
 {
@@ -12,10 +31,10 @@ ClimberState::ClimberState()
 ClimberState::ClimberState(int lh, int rh, int lf, int rf, Point com)
     : _com(com)
 {
-    _limbGrips[LeftHand] = lh;
-    _limbGrips[RightHand] = rh;
-    _limbGrips[LeftFoot] = lf;
-    _limbGrips[RightFoot] = rf;
+    _limbGrips[LeftArm] = lh;
+    _limbGrips[RightArm] = rh;
+    _limbGrips[LeftLeg] = lf;
+    _limbGrips[RightLeg] = rf;
 }
 
 ClimberState::ClimberState(const ClimberState &other)
@@ -25,12 +44,12 @@ ClimberState::ClimberState(const ClimberState &other)
         _limbGrips[i] = other._limbGrips[i];
 }
 
-int ClimberState::getGrip(ClimberState::Limb l) const
+int ClimberState::getGrip(Limb l) const
 {
     return _limbGrips[l];
 }
 
-ClimberState ClimberState::move(ClimberState::Limb l, int grip) const
+ClimberState ClimberState::move(Limb l, int grip) const
 {
     ClimberState next = *this;
     next._limbGrips[l] = grip;
@@ -39,7 +58,7 @@ ClimberState ClimberState::move(ClimberState::Limb l, int grip) const
 
 bool ClimberState::handOn(int grip) const
 {
-    return _limbGrips[LeftHand] == grip || _limbGrips[RightHand] == grip;
+    return _limbGrips[LeftArm] == grip || _limbGrips[RightArm] == grip;
 }
 
 bool ClimberState::isEquivalent(const ClimberState &other) const

@@ -23,7 +23,7 @@ public:
     bool isReachableStart(const ClimberState& pos) const;
     cv::Point geometricCenter(const ClimberState& pos) const;
     bool analyzeForces(const ClimberState& pos) const;
-    cv::Point supportForce(const Grip* g, ClimberState::Limb l, cv::Point slope) const;
+    cv::Point supportForce(const Grip* g, Limb l, cv::Point slope) const;
 
 private:
     void loadClimber(const ClimberSpecs &specs);

@@ -14,9 +14,11 @@
 class Climber
 {
 public:
-    Climber(const ClimberSpecs& specs, Physics *engine);
+    Climber(Physics *engine, const ClimberSpecs& specs);
     void setSpecs(const ClimberSpecs& specs);
     void setEngine(Physics *engine);
+
+    /// \todo multiple solution route option
     Path climb(const Route& r, bool visualize=true) const;
 
 private:

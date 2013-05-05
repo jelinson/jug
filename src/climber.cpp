@@ -8,7 +8,7 @@ const QList<Scalar> Climber::limbColors = QList<Scalar>()
         << Scalar(255, 0, 0)
         << Scalar(255, 255, 255);
 
-Climber::Climber(const ClimberSpecs &specs, Physics *engine)
+Climber::Climber(Physics *engine, const ClimberSpecs &specs)
     : _engine(engine), _specs(specs)
 {
     _engine->loadClimber(_specs);
@@ -31,6 +31,8 @@ Path Climber::climb(const Route &r, bool visualize) const
     _engine->loadRoute(&r);
     QList<ClimberState> possibleStarts = start(r);
 
+    qDebug() << "Generated possible starts";
+
     foreach (ClimberState start, possibleStarts) {
         PathProblem problem(start, r.nGrips(), r.lastGrip());
         Path solution =  Searcher::bfs(problem);
@@ -49,7 +51,9 @@ QList<ClimberState> Climber::start(const Route &r) const
 {
     int i = 0;
     QList<ClimberState> feasibleStarts;
+    qDebug() << "Number of grips" << r.nGrips();
     while (i < r.nGrips() - 3) {
+        qDebug() << i;
         QList<ClimberState> arrangements;
 
         // assume lowest four are two hands and two feet, might need to swap them
@@ -62,13 +66,15 @@ QList<ClimberState> Climber::start(const Route &r) const
         arrangements.append(ClimberState(i + 2, i + 2, i + 1, i));
         arrangements.append(ClimberState(i + 3, i + 3, i + 1, i));
 
-        for (int i = 0; i < arrangements.length(); ++i)
-            if (_engine->isPossible(arrangements[i]) && _engine->isReachableStart(arrangements[i]))
-                 foreach (ClimberState s, _engine->configurations(arrangements[i]))
+        for (int j = 0; j < arrangements.length(); ++j)
+            if (_engine->isPossible(arrangements[j]) && _engine->isReachableStart(arrangements[j]))
+                 foreach (ClimberState s, _engine->configurations(arrangements[j]))
                      feasibleStarts.append(s);
 
         if (!feasibleStarts.empty())
             return feasibleStarts;
+
+        ++i;
     }
     qDebug() << "No feasible start position found";
     return QList<ClimberState>();
@@ -91,7 +97,7 @@ void Climber::visualizePath(const Route &r, const Path &p) const
 void Climber::drawState(cv::Mat &img, const Route &r, const ClimberState s) const
 {
     for (int i = 0; i < N_LIMBS; ++i) {
-        int gripIndex = s.getGrip((ClimberState::Limb) i);
+        int gripIndex = s.getGrip((Limb) i);
         if (gripIndex != -1) {
             Q_ASSERT(gripIndex < r.nGrips());
             vector<Contour> contourWrapper(1, r[gripIndex]->getContour());

@@ -10,10 +10,10 @@ Physics::Physics()
 
 bool Physics::isPossible(const ClimberState &pos) const
 {
-    /// \refactor like whoa
-
     Q_ASSERT(isRouteLoaded());
+
     Point avg = geometricCenter(pos);
+    Q_ASSERT(jug::validPoint(avg));
 
     ClimberCoordinates coord(pos, _route);
 
@@ -22,43 +22,52 @@ bool Physics::isPossible(const ClimberState &pos) const
         Point diff = coord[i] - avg;
         int dist = abs(norm(diff));
 
-        if (dist > CS_LIMB_MAX || dist < CS_LIMB_MIN)
+        if (dist > CS_LIMB_MAX || dist < CS_LIMB_MIN) {
+            if (DEBUG_LEVEL >= VERBOSE)
+                qDebug() << "The" << (Limb) i << "was an unfeasible distance of" << dist;
             return false;
+        }
     }
 
     // check limb crossing
-    if (coord[(int) ClimberState::LeftHand].x > coord[(int) ClimberState::RightHand].x)
+    if (coord[LeftArm].x > coord[RightArm].x) {
+        if (DEBUG_LEVEL >= VERBOSE)
+            qDebug() << "The hands were crossed";
         return false;
+    }
 
-    if (coord[(int) ClimberState::LeftFoot].x > coord[(int) ClimberState::RightFoot].x)
+    if (coord[LeftLeg].x > coord[RightLeg].x) {
+        if (DEBUG_LEVEL >= VERBOSE)
+            qDebug() << "The legs were crossed";
         return false;
+    }
 
     // check feet below hands
-    int highestArm = min(coord[(int) ClimberState::LeftHand].y,
-                         coord[(int) ClimberState::RightHand].y);
-
-    int lowestLeg = max(coord[(int) ClimberState::LeftFoot].y,
-                        coord[(int) ClimberState::RightFoot].y);
+    int highestArm = min(coord[LeftArm].y, coord[RightArm].y);
+    int lowestLeg = max(coord[LeftLeg].y, coord[RightLeg].y);
 
     // if feet above hands
-    if (lowestLeg < highestArm)
+    if (lowestLeg < highestArm) {
+        if (DEBUG_LEVEL >= VERBOSE)
+            qDebug() << "Legs at" << lowestLeg << "were above arms at" << highestArm;
         return false;
+    }
 
-    // sanity check holds
-    int leftArmIndex = pos.getGrip(ClimberState::LeftHand);
-    int rightArmIndex = pos.getGrip(ClimberState::RightHand);
-
-    if (!(*_route)[leftArmIndex]->handHold() || !(*_route)[rightArmIndex]->handHold())
+    // check limbs on holds
+    if (coord.getGrip(LeftArm)->handHold() && coord.getGrip(RightArm)->handHold()) {
+        if (DEBUG_LEVEL >= VERBOSE)
+            qDebug() << "Hands were not on designated hand holds";
         return false;
+    }
 
     /// \todo nLimbs check
-
     return true;
 }
 
 QList<ClimberState> Physics::configurations(const ClimberState &pos) const
 {
     Q_ASSERT(isRouteLoaded());
+    qDebug() << "config in";
 
     QList<ClimberState> viableConfig;
     Point avg = geometricCenter(pos);
@@ -73,6 +82,7 @@ QList<ClimberState> Physics::configurations(const ClimberState &pos) const
         }
     }
 
+    qDebug() << "config out";
     return viableConfig;
 }
 
@@ -93,10 +103,11 @@ void Physics::fillInCom(ClimberState &pos, Point com) const
 
 bool Physics::isReachableStart(const ClimberState &pos) const
 {
+    qDebug() << "Is reachable start in";
     Q_ASSERT(isRouteLoaded());
 
-    int llegIndex = pos.getGrip(ClimberState::LeftFoot);
-    int rlegIndex = pos.getGrip(ClimberState::RightFoot);
+    int llegIndex = pos.getGrip(LeftLeg);
+    int rlegIndex = pos.getGrip(RightLeg);
 
     Q_ASSERT(llegIndex < _route->nGrips());
     Q_ASSERT(rlegIndex < _route->nGrips());
@@ -108,6 +119,7 @@ bool Physics::isReachableStart(const ClimberState &pos) const
     if(rlegIndex != -1)
         possible = possible | ((*_route)[rlegIndex]->getCom().y < CS_LIMB_MAX);
 
+    qDebug() << "Is reachable start out";
     return possible;
 }
 
@@ -117,7 +129,7 @@ Point Physics::geometricCenter(const ClimberState &pos) const
     Point avg;
     int smudges = 0;
     for (int i = 0; i < N_LIMBS; ++i) {
-        int gripIndex = pos.getGrip((ClimberState::Limb) i);
+        int gripIndex = pos.getGrip((Limb) i);
         if (gripIndex != -1)
             avg += (*_route)[gripIndex]->getCom();
         else
@@ -149,18 +161,18 @@ bool Physics::analyzeForces(const ClimberState &pos) const
             limbForce = slope;
         gravity += limbForce * (_specs.weight / (2 * N_LIMBS));
 
-        int gripIndex = pos.getGrip((ClimberState::Limb) i);
-        Point gripForce = supportForce((*_route)[gripIndex], (ClimberState::Limb) i, slope);
+        int gripIndex = pos.getGrip((Limb) i);
+        Point gripForce = supportForce((*_route)[gripIndex], (Limb) i, slope);
         support += gripForce;
     }
 
     return (-support.y >= gravity.y && abs(support.x + gravity.x) < LATERAL_SELF_BALANCE);
 }
 
-Point Physics::supportForce(const Grip *g, ClimberState::Limb l, Point slope) const
+Point Physics::supportForce(const Grip *g, Limb l, Point slope) const
 {
     // feet push up
-    if (l == ClimberState::LeftFoot || ClimberState::RightFoot)
+    if (l == LeftLeg || RightLeg)
         slope = -1 * slope;
 
     return slope * min(g->_nf.lookUp(slope), 1) * g->_area * AREA_FORCE_SCALING;

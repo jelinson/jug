@@ -4,6 +4,14 @@
 #include <opencv/cv.h>
 #include "globals.h"
 
+enum Limb {
+    LeftArm = 0,
+    RightArm = 1,
+    LeftLeg = 2,
+    RightLeg = 3
+};
+QDebug operator<<(QDebug db, Limb l);
+
 class ClimberState
 {
     friend class Physics;
@@ -11,13 +19,6 @@ public:
     ClimberState();
     ClimberState(int lh, int rh, int lf, int rf, cv::Point com=cv::Point(-1, -1));
     ClimberState(const ClimberState& other);
-
-    enum Limb {
-        LeftHand = 0,
-        RightHand = 1,
-        LeftFoot = 2,
-        RightFoot = 3
-    };
 
     int getGrip(Limb l) const;
     ClimberState move(Limb l, int grip) const;

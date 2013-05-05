@@ -4,6 +4,11 @@
 #include <QtDebug>
 #include <QDebug>
 
+#define VERBOSE 2
+#define NORMAL 1
+#define QUIET 0
+#define DEBUG_LEVEL VERBOSE
+
 #define IMG_WIDTH 428
 #define IMG_HEIGHT 533
 

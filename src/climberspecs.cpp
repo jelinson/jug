@@ -25,7 +25,7 @@ void ClimberSpecs::sanityCheck() const
     Q_ASSERT(legMax >= 0);
 }
 
-bool ClimberSpecs::ok(ClimberState::Limb l, int dist)
+bool ClimberSpecs::ok(Limb l, int dist)
 {
     Q_ASSERT(dist >= 0);
     if (IS_ARM(l))
@@ -36,4 +36,19 @@ bool ClimberSpecs::ok(ClimberState::Limb l, int dist)
         qWarning() << "Invalid limb";
         return false;
     }
+}
+
+QDebug operator<<(QDebug d, const ClimberSpecs& specs)
+{
+    d.nospace() << "Specs:: weight: "
+                << specs.weight
+                << ", arm min: "
+                << specs.armMin
+                << ", arm max: "
+                << specs.armMax
+                << ", leg min: "
+                << specs.legMin
+                << ", leg max "
+                << specs.legMax;
+    return d.nospace();
 }

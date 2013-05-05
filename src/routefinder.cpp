@@ -59,7 +59,7 @@ Route RouteFinder::find(Mat* img)
         drawContours(drawing, contours, i, Scalar(255), 2, 8);
     }
     qDebug() << "Found" << contours.size() << "contours";
-    jug::showImage(&drawing, "Contours", true);
+    //jug::showImage(&drawing, "Contours", true);
 
     Route r(_img);
     r.loadFromContours(contours);

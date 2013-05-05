@@ -40,16 +40,13 @@ int main(int argc, char* argv[])
 
     RouteFinder rf;
     Route route = rf.find(&img);
+    route.analyzeGrips();
     cv::destroyAllWindows();
 
-    route.analyzeGrips();
-    route.visualize();
-
-    //Physics* engine = new Physics;
-    //ClimberSpecs spec;
-    //Climber c(spec, engine);
-    //Path solution = c.climb(route);
-
+    Physics* engine = new Physics;
+    ClimberSpecs spec;
+    Climber c(engine, spec);
+    Path solution = c.climb(route);
     return 0;
 #endif
 }

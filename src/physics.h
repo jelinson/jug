@@ -29,6 +29,12 @@ private:
     void loadClimber(const ClimberSpecs &specs);
     void loadRoute(const Route* r);
 
+    bool checkDistances(const ClimberCoordinates& coord, const cv::Point& com) const;
+    bool checkLimbCrossing(const ClimberCoordinates& coord) const;
+    bool checkFeetAboveHands(const ClimberCoordinates& coord) const;
+    bool checkForHandHolds(const ClimberCoordinates& coord) const;
+    bool checkLimbsPerGrip(const ClimberCoordinates& coord) const;
+
     bool compareForces(const cv::Point& gravity, const cv::Point& support) const;
 
     const Route* _route;

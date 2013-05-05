@@ -14,12 +14,14 @@ public:
     ClimberCoordinates(const ClimberState& state, const Route* route);
     const Grip* getGrip(int i) const;
     const Grip* getGrip(Limb i) const;
+    cv::Point getCom() const;
     cv::Point operator[](int i) const;
     cv::Point operator[](Limb i) const;
 
 private:
     QList<cv::Point> _pos;
     QList<const Grip*> _grips;
+    cv::Point _com;
 };
 
 #endif // CLIMBERCOORDINATES_H

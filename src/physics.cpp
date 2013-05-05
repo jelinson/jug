@@ -17,48 +17,17 @@ bool Physics::isPossible(const ClimberState &pos) const
 
     ClimberCoordinates coord(pos, _route);
 
-    // check distances
-    for (int i = 0; i < N_LIMBS; ++i) {
-        Point diff = coord[i] - avg;
-        int dist = abs(norm(diff));
-
-        if (dist > CS_LIMB_MAX || dist < CS_LIMB_MIN) {
-            if (DEBUG_LEVEL >= VERBOSE)
-                qDebug() << "The" << (Limb) i << "was an unfeasible distance of" << dist;
-            return false;
-        }
-    }
-
-    // check limb crossing
-    if (coord[LeftArm].x > coord[RightArm].x + CS_LIMB_MIN) {
-        if (DEBUG_LEVEL >= VERBOSE)
-            qDebug() << "The hands were crossed";
+    if (!checkDistances(coord, avg))
         return false;
-    }
 
-    if (coord[LeftLeg].x > coord[RightLeg].x + CS_LIMB_MIN) {
-        if (DEBUG_LEVEL >= VERBOSE)
-            qDebug() << "The legs were crossed";
+    if (!checkLimbCrossing(coord))
         return false;
-    }
 
-    // check feet below hands
-    int highestArm = min(coord[LeftArm].y, coord[RightArm].y);
-    int lowestLeg = max(coord[LeftLeg].y, coord[RightLeg].y);
-
-    // if feet above hands
-    if (lowestLeg < highestArm) {
-        if (DEBUG_LEVEL >= VERBOSE)
-            qDebug() << "Legs at" << lowestLeg << "were above arms at" << highestArm;
+    if (!checkFeetAboveHands(coord))
         return false;
-    }
 
-    // check limbs on holds
-    if (coord.getGrip(LeftArm)->handHold() && coord.getGrip(RightArm)->handHold()) {
-        if (DEBUG_LEVEL >= VERBOSE)
-            qDebug() << "Hands were not on designated hand holds";
+    if (!checkForHandHolds(coord))
         return false;
-    }
 
     /// \todo nLimbs check
     return true;
@@ -76,7 +45,9 @@ QList<ClimberState> Physics::configurations(const ClimberState &pos) const
             Point adjCom = avg + Point(x * LATTICE_SPACING, y * LATTICE_SPACING);
             ClimberState adjPos = pos;
             adjPos.setCenter(adjCom);
-            if (jug::validPoint(adjCom) && analyzeForces(adjPos))
+            ClimberCoordinates coord(adjPos, _route);
+            if (jug::validPoint(adjCom) && analyzeForces(adjPos) &&
+                    checkDistances(coord, adjCom))
                 viableConfig.append(adjPos);
         }
     }
@@ -181,6 +152,72 @@ Point Physics::supportForce(const Grip *g, Limb l, Point slope) const
 void Physics::loadRoute(const Route *r)
 {
     _route = r;
+}
+
+bool Physics::checkDistances(const ClimberCoordinates &coord, const Point &com) const
+{
+    // check distances
+    for (int i = 0; i < N_LIMBS; ++i) {
+        Point diff = coord[i] - com;
+        int dist = abs(norm(diff));
+
+        if (dist > CS_LIMB_MAX || dist < CS_LIMB_MIN) {
+            if (DEBUG_LEVEL >= VERBOSE)
+                qDebug() << "The" << (Limb) i << "was an unfeasible distance of" << dist;
+            return false;
+        }
+    }
+    return true;
+}
+
+bool Physics::checkLimbCrossing(const ClimberCoordinates &coord) const
+{
+    // check limb crossing
+    if (coord[LeftArm].x > coord[RightArm].x + CS_LIMB_MIN) {
+        if (DEBUG_LEVEL >= VERBOSE)
+            qDebug() << "The hands were crossed";
+        return false;
+    }
+
+    if (coord[LeftLeg].x > coord[RightLeg].x + CS_LIMB_MIN) {
+        if (DEBUG_LEVEL >= VERBOSE)
+            qDebug() << "The legs were crossed";
+        return false;
+    }
+
+    return true;
+}
+
+bool Physics::checkFeetAboveHands(const ClimberCoordinates &coord) const
+{
+    // check feet below hands
+    int lowestArm = max(coord[LeftArm].y, coord[RightArm].y);
+    int highestLeg = min(coord[LeftLeg].y, coord[RightLeg].y);
+
+    // if a single leg is above both arms
+    if (highestLeg < lowestArm) {
+        if (DEBUG_LEVEL >= VERBOSE)
+            qDebug() << "Leg at" << highestLeg << "was above arms at" << lowestArm;
+        return false;
+    }
+
+    return true;
+}
+
+bool Physics::checkForHandHolds(const ClimberCoordinates &coord) const
+{
+    // check limbs on holds
+    if (!coord.getGrip(LeftArm)->handHold() || !coord.getGrip(RightArm)->handHold()) {
+        if (DEBUG_LEVEL >= VERBOSE)
+            qDebug() << "Hands were not on designated hand holds";
+        return false;
+    }
+    return true;
+}
+
+bool Physics::checkLimbsPerGrip(const ClimberCoordinates &coord) const
+{
+
 }
 
 bool Physics::compareForces(const Point &gravity, const Point &support) const

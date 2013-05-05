@@ -20,8 +20,8 @@ Grip::Grip(const Contour &contour, const Rect &boundingRect)
 
 bool Grip::handHold() const
 {
-    return (_perimeter > MIN_HAND_HOLD_PERIMETER) &&
-            (_area > MIN_HAND_HOLD_AREA);
+    return (_perimeter >= MIN_HAND_HOLD_PERIMETER) &&
+            (abs(_area) >= MIN_HAND_HOLD_AREA);
 }
 
 bool Grip::nLimbs(int i) const

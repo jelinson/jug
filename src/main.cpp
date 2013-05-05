@@ -9,6 +9,7 @@
 #include "climber.h"
 #include "climberspecs.h"
 #include "searcher.h"
+#include "globals.h"
 
 #define TEST_MODE 0
 
@@ -22,7 +23,7 @@ void processArgs(int argc, char* argv[], std::string* inPath, std::string* outPa
             *outPath = "../img/output";
     }
     else
-        *inPath = "../img/input/test4.JPG";
+        *inPath = "../img/input/test2.JPG";
 }
 
 int main(int argc, char* argv[])

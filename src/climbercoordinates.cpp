@@ -1,6 +1,7 @@
 #include "climbercoordinates.h"
 
 ClimberCoordinates::ClimberCoordinates(const ClimberState &state, const Route *route)
+    : _com(state.getCom())
 {
     for (int i = 0; i < N_LIMBS; ++i) {
         int gripIndex = state.getGripIndex(i);
@@ -19,6 +20,11 @@ const Grip *ClimberCoordinates::getGrip(Limb i) const
 {
     Q_ASSERT(i != -1);
     return _grips[(int) i];
+}
+
+cv::Point ClimberCoordinates::getCom() const
+{
+    return _com;
 }
 
 cv::Point ClimberCoordinates::operator [](int i) const

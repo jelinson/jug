@@ -121,7 +121,7 @@ void Climber::drawState(cv::Mat &img, const Route &r, const ClimberState s) cons
     }
 
     if (s.getCom().x != -1)
-        circle(img, s.getCom(), 20, Scalar(0,0,0));
+        circle(img, s.getCom(), 7, Scalar(0,0,0), -1);
     else
-        circle(img, _engine->geometricCenter(s), 20, Scalar(0,0,0));
+        circle(img, _engine->geometricCenter(s), 7, Scalar(0,0,0), -1);
 }

@@ -110,6 +110,6 @@ QDebug operator<<(QDebug db, const ClimberState& state)
 {
     db.nospace() << "ClimberState:: com:" << state._com;
     for (int i = 0; i < N_LIMBS; ++i)
-        db << (Limb) i << " at " << state.getGripIndex(i);
+        db.nospace() << ", " << (Limb) i << " at " << state.getGripIndex(i);
     return db.space();
 }

@@ -4,14 +4,16 @@ using namespace std;
 using namespace cv;
 
 Grip::Grip(const Contour &contour)
-    : _contour(contour)
+    : _contour(contour), _area(-1), _perimeter(-1)
 {
     _boundingRect = minAreaRect(_contour).boundingRect();
 }
 
 Grip::Grip(const Contour &contour, const Rect &boundingRect)
     : _contour(contour),
-      _boundingRect(boundingRect)
+      _boundingRect(boundingRect),
+      _area(-1),
+      _perimeter(-1)
 {
     // Nothing to do
 }

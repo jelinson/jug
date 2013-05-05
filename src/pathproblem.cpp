@@ -20,7 +20,9 @@ Path PathProblem::expand(const ClimberState &current)
 {
     QList<ClimberState> neighbors;
     for (int limb = 0; limb < N_LIMBS; ++limb) {
-        for (int gripIndex = -1; gripIndex < _nGrips; ++gripIndex) {
+        for (int gripIndex = 0; gripIndex < _nGrips; ++gripIndex) {
+        /// \todo revisit
+        //for (int gripIndex = -1; gripIndex < _nGrips; ++gripIndex) {
             ClimberState next = current.move((Limb) limb, gripIndex);
 
             if (_engine->isPossible(next))

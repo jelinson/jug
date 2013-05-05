@@ -21,6 +21,7 @@ public:
     ClimberState(const ClimberState& other);
 
     int getGrip(Limb l) const;
+    int getGrip(int i) const;
     ClimberState move(Limb l, int grip) const;
     bool handOn(int grip) const;
     bool isEquivalent(const ClimberState& other) const;

@@ -38,7 +38,7 @@ private:
     std::vector<cv::Vec4i> _defects;
     NormalField _nf;
     double _area;
-    int _perimeter; /// \todo colon initialize
+    int _perimeter;
 
     friend class Route;
     friend class Physics;

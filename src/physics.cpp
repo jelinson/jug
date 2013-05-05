@@ -67,7 +67,6 @@ bool Physics::isPossible(const ClimberState &pos) const
 QList<ClimberState> Physics::configurations(const ClimberState &pos) const
 {
     Q_ASSERT(isRouteLoaded());
-    qDebug() << "config in";
 
     QList<ClimberState> viableConfig;
     Point avg = geometricCenter(pos);
@@ -82,7 +81,6 @@ QList<ClimberState> Physics::configurations(const ClimberState &pos) const
         }
     }
 
-    qDebug() << "config out";
     return viableConfig;
 }
 
@@ -103,24 +101,10 @@ void Physics::fillInCom(ClimberState &pos, Point com) const
 
 bool Physics::isReachableStart(const ClimberState &pos) const
 {
-    qDebug() << "Is reachable start in";
     Q_ASSERT(isRouteLoaded());
-
-    int llegIndex = pos.getGrip(LeftLeg);
-    int rlegIndex = pos.getGrip(RightLeg);
-
-    Q_ASSERT(llegIndex < _route->nGrips());
-    Q_ASSERT(rlegIndex < _route->nGrips());
-
-    bool possible = false;
-    if (llegIndex != -1)
-        possible = possible | ((*_route)[llegIndex]->getCom().y < CS_LIMB_MAX);
-
-    if(rlegIndex != -1)
-        possible = possible | ((*_route)[rlegIndex]->getCom().y < CS_LIMB_MAX);
-
-    qDebug() << "Is reachable start out";
-    return possible;
+    ClimberCoordinates coord(pos, _route);
+    return coord.getGrip(LeftLeg)->getCom().y < CS_LIMB_MAX &&
+            coord.getGrip(RightLeg)->getCom().y < CS_LIMB_MAX;
 }
 
 Point Physics::geometricCenter(const ClimberState &pos) const
@@ -129,7 +113,7 @@ Point Physics::geometricCenter(const ClimberState &pos) const
     Point avg;
     int smudges = 0;
     for (int i = 0; i < N_LIMBS; ++i) {
-        int gripIndex = pos.getGrip((Limb) i);
+        int gripIndex = pos.getGrip(i);
         if (gripIndex != -1)
             avg += (*_route)[gripIndex]->getCom();
         else
@@ -161,7 +145,7 @@ bool Physics::analyzeForces(const ClimberState &pos) const
             limbForce = slope;
         gravity += limbForce * (_specs.weight / (2 * N_LIMBS));
 
-        int gripIndex = pos.getGrip((Limb) i);
+        int gripIndex = pos.getGrip(i);
         Point gripForce = supportForce((*_route)[gripIndex], (Limb) i, slope);
         support += gripForce;
     }

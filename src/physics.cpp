@@ -103,8 +103,13 @@ bool Physics::isReachableStart(const ClimberState &pos) const
 {
     Q_ASSERT(isRouteLoaded());
     ClimberCoordinates coord(pos, _route);
-    return coord.getGrip(LeftLeg)->getCom().y < CS_LIMB_MAX &&
-            coord.getGrip(RightLeg)->getCom().y < CS_LIMB_MAX;
+    bool b = jug::fromGround(coord.getGrip(LeftLeg)->getCom().y) < CS_LIMB_MAX &&
+              jug::fromGround(coord.getGrip(RightLeg)->getCom().y) < CS_LIMB_MAX;
+
+    if (!b && DEBUG_LEVEL >= VERBOSE)
+        qDebug() << "Position was not reachable";
+
+    return b;
 }
 
 Point Physics::geometricCenter(const ClimberState &pos) const
@@ -113,7 +118,7 @@ Point Physics::geometricCenter(const ClimberState &pos) const
     Point avg;
     int smudges = 0;
     for (int i = 0; i < N_LIMBS; ++i) {
-        int gripIndex = pos.getGrip(i);
+        int gripIndex = pos.getGripIndex(i);
         if (gripIndex != -1)
             avg += (*_route)[gripIndex]->getCom();
         else
@@ -127,7 +132,6 @@ Point Physics::geometricCenter(const ClimberState &pos) const
 bool Physics::analyzeForces(const ClimberState &pos) const
 {
     Q_ASSERT(isRouteLoaded());
-
     ClimberCoordinates coord(pos, _route);
 
     // half the weight is in the center of mass, the other half is distributed
@@ -136,21 +140,21 @@ bool Physics::analyzeForces(const ClimberState &pos) const
     Point support(0, 0);
 
     for (int i = 0; i < N_LIMBS; ++i) {
-        Point slope = Geometry::discreteSlope(coord[i], pos._com);
+        Point slope = Geometry::discreteSlope(pos._com, coord[i]);
 
         Point limbForce;
+        // hand is above center of mass (or lower in y coordinate)
         if (slope.y < 0)
             limbForce = Point(slope.x, -slope.y);
         else
             limbForce = slope;
         gravity += limbForce * (_specs.weight / (2 * N_LIMBS));
 
-        int gripIndex = pos.getGrip(i);
-        Point gripForce = supportForce((*_route)[gripIndex], (Limb) i, slope);
+        Point gripForce = supportForce(coord.getGrip(i), (Limb) i, slope);
         support += gripForce;
     }
 
-    return (-support.y >= gravity.y && abs(support.x + gravity.x) < LATERAL_SELF_BALANCE);
+    return compareForces(gravity, support);
 }
 
 Point Physics::supportForce(const Grip *g, Limb l, Point slope) const
@@ -165,6 +169,12 @@ Point Physics::supportForce(const Grip *g, Limb l, Point slope) const
 void Physics::loadRoute(const Route *r)
 {
     _route = r;
+}
+
+bool Physics::compareForces(const Point &gravity, const Point &support) const
+{
+    return -support.y >= gravity.y &&
+            abs(support.x + gravity.x) <= LATERAL_SELF_BALANCE;
 }
 
 bool Physics::isRouteLoaded() const

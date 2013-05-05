@@ -3,7 +3,7 @@
 ClimberCoordinates::ClimberCoordinates(const ClimberState &state, const Route *route)
 {
     for (int i = 0; i < N_LIMBS; ++i) {
-        int gripIndex = state.getGrip((Limb) i);
+        int gripIndex = state.getGripIndex(i);
         _grips.append((*route)[gripIndex]);
         _pos.append(_grips[i]->getCom());
     }

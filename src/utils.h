@@ -10,6 +10,7 @@ namespace jug {
     void showImage(const cv::Mat* img, const std::string& title, bool wait=false);
     bool loadImage(const std::string& path, cv::Mat& dst);
     bool validPoint(const cv::Point& pos);
+    int fromGround(int y);
 }
 
 #endif // UTILS_H

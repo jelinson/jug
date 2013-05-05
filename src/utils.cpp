@@ -41,4 +41,9 @@ bool validPoint(const cv::Point& pos)
     return pos.x >= 0 && pos.y >= 0 && pos.x < IMG_WIDTH && pos.y < IMG_HEIGHT;
 }
 
+int fromGround(int y)
+{
+    return IMG_HEIGHT - y;
+}
+
 }

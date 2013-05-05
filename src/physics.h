@@ -29,6 +29,8 @@ private:
     void loadClimber(const ClimberSpecs &specs);
     void loadRoute(const Route* r);
 
+    bool compareForces(const cv::Point& gravity, const cv::Point& support) const;
+
     const Route* _route;
     ClimberSpecs _specs;
 };

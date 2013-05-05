@@ -97,7 +97,7 @@ void Climber::visualizePath(const Route &r, const Path &p) const
 void Climber::drawState(cv::Mat &img, const Route &r, const ClimberState s) const
 {
     for (int i = 0; i < N_LIMBS; ++i) {
-        int gripIndex = s.getGrip((Limb) i);
+        int gripIndex = s.getGripIndex((Limb) i);
         if (gripIndex != -1) {
             Q_ASSERT(gripIndex < r.nGrips());
             vector<Contour> contourWrapper(1, r[gripIndex]->getContour());

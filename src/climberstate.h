@@ -20,8 +20,8 @@ public:
     ClimberState(int lh, int rh, int lf, int rf, cv::Point com=cv::Point(-1, -1));
     ClimberState(const ClimberState& other);
 
-    int getGrip(Limb l) const;
-    int getGrip(int i) const;
+    int getGripIndex(Limb l) const;
+    int getGripIndex(int i) const;
     ClimberState move(Limb l, int grip) const;
     bool handOn(int grip) const;
     bool isEquivalent(const ClimberState& other) const;

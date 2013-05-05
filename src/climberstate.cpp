@@ -54,6 +54,15 @@ int ClimberState::getGripIndex(int i) const
     return getGripIndex((Limb) i);
 }
 
+int ClimberState::limbsOnGrip(int g) const
+{
+    int count = 0;
+    for (int i = 0; i < N_LIMBS; ++i)
+        if (_limbGrips[i] == g)
+            ++count;
+    return count;
+}
+
 Point ClimberState::getCom() const
 {
     return _com;

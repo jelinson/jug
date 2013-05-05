@@ -29,6 +29,9 @@ bool Physics::isPossible(const ClimberState &pos) const
     if (!checkForHandHolds(coord))
         return false;
 
+    if (!checkLimbsPerGrip(pos, coord))
+        return false;
+
     /// \todo nLimbs check
     return true;
 }
@@ -215,9 +218,21 @@ bool Physics::checkForHandHolds(const ClimberCoordinates &coord) const
     return true;
 }
 
-bool Physics::checkLimbsPerGrip(const ClimberCoordinates &coord) const
+bool Physics::checkLimbsPerGrip(const ClimberState &pos, const ClimberCoordinates& coord) const
 {
-
+    for (int i = 0; i < N_LIMBS; ++i) {
+        int gripIndex = pos.getGripIndex(i);
+        int gripCount = pos.limbsOnGrip(gripIndex);
+        if (!coord.getGrip(i)->nLimbs(gripCount)) {
+            if (DEBUG_LEVEL >= VERBOSE)
+                qDebug().nospace() << "Too many limbs, "
+                                   << gripCount
+                                   << ", on grip "
+                                   << gripIndex;
+            return false;
+        }
+    }
+    return true;
 }
 
 bool Physics::compareForces(const Point &gravity, const Point &support) const

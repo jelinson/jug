@@ -33,7 +33,7 @@ private:
     bool checkLimbCrossing(const ClimberCoordinates& coord) const;
     bool checkFeetAboveHands(const ClimberCoordinates& coord) const;
     bool checkForHandHolds(const ClimberCoordinates& coord) const;
-    bool checkLimbsPerGrip(const ClimberCoordinates& coord) const;
+    bool checkLimbsPerGrip(const ClimberState &pos, const ClimberCoordinates &coord) const;
 
     bool compareForces(const cv::Point& gravity, const cv::Point& support) const;
 

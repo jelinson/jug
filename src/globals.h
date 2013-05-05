@@ -15,15 +15,15 @@
 #define MIN_SAT_THRES 40
 #define MAX_SAT_THRES 255
 
-#define HUE_MARGIN 8
+#define HUE_MARGIN 10
 
 #define N_LIMBS 4
 
 #define SLOPE_RANGE 5
 
 #define CS_WEIGHT 100
-#define CS_LIMB_MIN 25
-#define CS_LIMB_MAX 175
+#define CS_LIMB_MIN 40
+#define CS_LIMB_MAX 150
 
 #define LATERAL_SELF_BALANCE 50
 #define AREA_FORCE_SCALING 5

@@ -46,7 +46,7 @@ void NormalField::add(const Point &slope)
     ++_counts[slope.x + _offset][slope.y + _offset];
 }
 
-int NormalField::lookUp(const Point &slope)
+int NormalField::lookUp(const Point &slope) const
 {
     return _counts[slope.x][slope.y];
 }
@@ -74,6 +74,51 @@ void Geometry::testNormals()
     hexagon.push_back(Point(2,0));
     hexagon.push_back(Point(1,0));
     qDebug() << "Hexagon\n" << countNormals(hexagon);
+}
+
+Point Geometry::discreteSlope(const Point &src, const Point &dst)
+{
+    Point diff = dst - src;
+    double theta = atan2(diff.y, diff.x);
+    return lookUpSlope(theta);
+}
+
+Point Geometry::lookUpSlope(double theta)
+{
+    QList<Point> slopes = QList<Point>() << Point(2, 0)
+                                         << Point(1, 1)
+                                         << Point(0, 2)
+                                         << Point(-1, 1)
+                                         << Point(-2, 0)
+                                         << Point(-1, -1)
+                                         << Point(-2, 0)
+                                         << Point(1, -1);
+
+    double incr = PI / slopes.size();
+    double minAngle = incr;
+    double maxAngle = minAngle + 2 * incr;
+    for (int i = 1; i < slopes.size(); ++i) {
+          if (theta >= minAngle && theta <= maxAngle)
+              return slopes[i];
+
+          minAngle += 2 * incr;
+          maxAngle += 2 * incr;
+    }
+
+    // straddle case
+    if (theta > wrapTo2Pi(0 - incr) || theta < incr)
+        return slopes.front();
+
+    qWarning() << "Could not discretize angle" << theta;
+    return Point(-1, -1);
+}
+
+double Geometry::wrapTo2Pi(double theta)
+{
+    if (theta < 0)
+        return theta + 2 * PI;
+    else
+        return theta;
 }
 
 QDebug operator<<(QDebug dbg, const NormalField &nf)

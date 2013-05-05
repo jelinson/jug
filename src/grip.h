@@ -25,6 +25,9 @@ public:
         return _com;
     }
 
+    bool handHold() const;
+    bool nLimbs(int i) const;
+
 private:
     void analyze();
 
@@ -38,6 +41,7 @@ private:
     int _perimeter; /// \todo colon initialize
 
     friend class Route;
+    friend class Physics;
     friend QDebug operator<<(QDebug, const Grip&);
 };
 

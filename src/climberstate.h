@@ -23,6 +23,7 @@ public:
     ClimberState move(Limb l, int grip) const;
     bool handOn(int grip) const;
     bool isEquivalent(const ClimberState& other) const;
+
     static bool compare(const ClimberState& a, const ClimberState& b);
 
 private:

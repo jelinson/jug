@@ -16,6 +16,17 @@ Grip::Grip(const Contour &contour, const Rect &boundingRect)
     // Nothing to do
 }
 
+bool Grip::handHold() const
+{
+    return (_perimeter > MIN_HAND_HOLD_PERIMETER) &&
+            (_area > MIN_HAND_HOLD_AREA);
+}
+
+bool Grip::nLimbs(int i) const
+{
+    return _perimeter >= i * MIN_PERIMETER_PER_LIMB;
+}
+
 void Grip::analyze()
 {
     _moments = moments(_contour);

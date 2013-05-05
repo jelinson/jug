@@ -10,13 +10,16 @@ Physics::Physics()
 
 bool Physics::isPossible(const ClimberState &pos) const
 {
+    /// \refactor like whoa
+
     Q_ASSERT(isRouteLoaded());
     Point avg = geometricCenter(pos);
 
+    ClimberCoordinates coord(pos, _route);
+
     // check distances
     for (int i = 0; i < N_LIMBS; ++i) {
-        int gripIndex = pos.getGrip((ClimberState::Limb) i);
-        Point diff = (*_route)[gripIndex]->getCom() - avg;
+        Point diff = coord[i] - avg;
         int dist = abs(norm(diff));
 
         if (dist > CS_LIMB_MAX || dist < CS_LIMB_MIN)
@@ -24,9 +27,31 @@ bool Physics::isPossible(const ClimberState &pos) const
     }
 
     // check limb crossing
+    if (coord[(int) ClimberState::LeftHand].x > coord[(int) ClimberState::RightHand].x)
+        return false;
 
+    if (coord[(int) ClimberState::LeftFoot].x > coord[(int) ClimberState::RightFoot].x)
+        return false;
 
+    // check feet below hands
+    int highestArm = min(coord[(int) ClimberState::LeftHand].y,
+                         coord[(int) ClimberState::RightHand].y);
 
+    int lowestLeg = max(coord[(int) ClimberState::LeftFoot].y,
+                        coord[(int) ClimberState::RightFoot].y);
+
+    // if feet above hands
+    if (lowestLeg < highestArm)
+        return false;
+
+    // sanity check holds
+    int leftArmIndex = pos.getGrip(ClimberState::LeftHand);
+    int rightArmIndex = pos.getGrip(ClimberState::RightHand);
+
+    if (!(*_route)[leftArmIndex]->handHold() || !(*_route)[rightArmIndex]->handHold())
+        return false;
+
+    /// \todo nLimbs check
 
     return true;
 }
@@ -107,22 +132,43 @@ bool Physics::analyzeForces(const ClimberState &pos) const
 {
     Q_ASSERT(isRouteLoaded());
 
+    ClimberCoordinates coord(pos, _route);
 
-    return false;
+    // half the weight is in the center of mass, the other half is distributed
+    // among the four limbs
+    Point gravity(0, _specs.weight / 2);
+    Point support(0, 0);
+
+    for (int i = 0; i < N_LIMBS; ++i) {
+        Point slope = Geometry::discreteSlope(coord[i], pos._com);
+
+        Point limbForce;
+        if (slope.y < 0)
+            limbForce = Point(slope.x, -slope.y);
+        else
+            limbForce = slope;
+        gravity += limbForce * (_specs.weight / (2 * N_LIMBS));
+
+        int gripIndex = pos.getGrip((ClimberState::Limb) i);
+        Point gripForce = supportForce((*_route)[gripIndex], (ClimberState::Limb) i, slope);
+        support += gripForce;
+    }
+
+    return (-support.y >= gravity.y && abs(support.x + gravity.x) < LATERAL_SELF_BALANCE);
+}
+
+Point Physics::supportForce(const Grip *g, ClimberState::Limb l, Point slope) const
+{
+    // feet push up
+    if (l == ClimberState::LeftFoot || ClimberState::RightFoot)
+        slope = -1 * slope;
+
+    return slope * min(g->_nf.lookUp(slope), 1) * g->_area * AREA_FORCE_SCALING;
 }
 
 void Physics::loadRoute(const Route *r)
 {
     _route = r;
-}
-
-bool Physics::checkCrossed(int lIndex, int rIndex)
-{
-    if (lIndex == -1 || rIndex == -1)
-        return false;
-
-    int lx = (*_route)[lIndex]->getCom().x;
-    int rx = (*_route)[rIndex]->getCom().x;
 }
 
 bool Physics::isRouteLoaded() const

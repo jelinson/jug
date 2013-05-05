@@ -5,7 +5,9 @@
 #include <opencv/cv.h>
 #include "climberstate.h"
 #include "climberspecs.h"
+#include "climbercoordinates.h"
 #include "route.h"
+#include "grip.h"
 #include "globals.h"
 
 class Physics
@@ -21,11 +23,11 @@ public:
     bool isReachableStart(const ClimberState& pos) const;
     cv::Point geometricCenter(const ClimberState& pos) const;
     bool analyzeForces(const ClimberState& pos) const;
+    cv::Point supportForce(const Grip* g, ClimberState::Limb l, cv::Point slope) const;
 
 private:
     void loadClimber(const ClimberSpecs &specs);
     void loadRoute(const Route* r);
-    bool checkCrossed(int lIndex, int rIndex);
 
     const Route* _route;
     ClimberSpecs _specs;

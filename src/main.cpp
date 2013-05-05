@@ -23,7 +23,7 @@ void processArgs(int argc, char* argv[], std::string* inPath, std::string* outPa
             *outPath = "../img/output";
     }
     else
-        *inPath = "../img/input/test2.JPG";
+        *inPath = "../img/input/test1.JPG";
 }
 
 int main(int argc, char* argv[])
@@ -48,7 +48,7 @@ int main(int argc, char* argv[])
     RouteFinder rf;
     Route route = rf.find(&img);
     route.analyzeGrips();
-    //route.visualize();
+    route.visualize();
     jug::clearImages();
 
     Physics* engine = new Physics;

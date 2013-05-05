@@ -97,6 +97,7 @@ void RouteFinder::getRouteHue()
     _routeYSelection = yMouse;
     _routeHue = _hsvChannels[0].data[yMouse * _hsvChannels[0].cols + xMouse];
     qDebug() << "Searching for route with hue" << _routeHue;
+    jug::clearImages();
 }
 
 void RouteFinder::denoise()

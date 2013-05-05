@@ -75,7 +75,6 @@ void Physics::fillInCom(ClimberState &pos, Point com) const
 
 bool Physics::isReachableStart(const ClimberState &pos) const
 {
-    qDebug() << "isReachableStart in";
     Q_ASSERT(isRouteLoaded());
     ClimberCoordinates coord(pos, _route);
     bool b = jug::fromGround(coord.getGrip(LeftLeg)->getCom().y) < CS_LIMB_MAX &&
@@ -84,7 +83,6 @@ bool Physics::isReachableStart(const ClimberState &pos) const
     if (!b && DEBUG_LEVEL >= VERBOSE)
         qDebug() << "Position was not reachable";
 
-    qDebug() << "isReachableStart out";
     return b;
 }
 

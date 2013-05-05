@@ -21,14 +21,14 @@ void Route::loadFromContours(const vector<Contour> &contours)
 
     for (int i = 0; i < contours.size(); ++i)
         _grips.push_back(new Grip(contours[i]));
-
-    sort(_grips.begin(), _grips.end());
 }
 
 void Route::analyzeGrips()
 {
     for (int i = 0; i < _grips.size(); ++i)
         _grips[i]->analyze();
+
+    sort(_grips.begin(), _grips.end());
 }
 
 void Route::visualize()

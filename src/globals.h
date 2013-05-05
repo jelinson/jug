@@ -7,7 +7,7 @@
 #define VERBOSE 2
 #define NORMAL 1
 #define QUIET 0
-#define DEBUG_LEVEL VERBOSE
+#define DEBUG_LEVEL QUIET
 
 #define IMG_WIDTH 428
 #define IMG_HEIGHT 533
@@ -23,7 +23,7 @@
 
 #define CS_WEIGHT 100
 #define CS_LIMB_MIN 40
-#define CS_LIMB_MAX 150
+#define CS_LIMB_MAX 175
 
 #define LATERAL_SELF_BALANCE 50
 #define AREA_FORCE_SCALING 5

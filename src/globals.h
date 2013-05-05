@@ -23,7 +23,7 @@
 
 #define CS_WEIGHT 100
 #define CS_LIMB_MIN 25
-#define CS_LIMB_MAX 400
+#define CS_LIMB_MAX 150
 
 #define LATERAL_SELF_BALANCE 50
 #define AREA_FORCE_SCALING 5
@@ -34,7 +34,7 @@
 #define IS_ARM(x) ((x == 0) || (x == 1))
 #define IS_LEG(x) ((x == 2) || (x == 3))
 
-#define LATTICE_SPACING 10
+#define LATTICE_SPACING 4
 #define LATTICE_DIM 4
 
 #define MIN_HAND_HOLD_PERIMETER 30

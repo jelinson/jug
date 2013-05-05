@@ -18,6 +18,7 @@ ClimberState PathProblem::start() const
 
 Path PathProblem::expand(const ClimberState &current)
 {
+    qDebug() << "expand in";
     QList<ClimberState> neighbors;
     for (int limb = 0; limb < N_LIMBS; ++limb) {
         for (int gripIndex = 0; gripIndex < _nGrips; ++gripIndex) {
@@ -30,6 +31,7 @@ Path PathProblem::expand(const ClimberState &current)
                     neighbors.append(nextConfig);
         }
     }
+    qDebug() << "expand out";
     return neighbors;
 }
 

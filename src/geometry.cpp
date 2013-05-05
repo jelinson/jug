@@ -79,7 +79,7 @@ void Geometry::testNormals()
 Point Geometry::discreteSlope(const Point &src, const Point &dst)
 {
     Point diff = dst - src;
-    double theta = atan2(diff.y, diff.x);
+    double theta = wrapTo2Pi(atan2(diff.y, diff.x));
     return lookUpSlope(theta);
 }
 

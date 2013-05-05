@@ -35,7 +35,10 @@ Path Climber::climb(const Route &r, bool visualize) const
         qDebug() << "Generated possible starts";
 
     foreach (ClimberState start, possibleStarts) {
+        qDebug() << "Trying to start from" << start;
         PathProblem problem(start, r.nGrips(), r.lastGrip());
+        problem.setEngine(_engine);
+
         Path solution =  Searcher::bfs(problem);
         if (!solution.isEmpty()) {
             if (visualize)
@@ -87,8 +90,10 @@ QList<ClimberState> Climber::start(const Route &r) const
 
 void Climber::visualizePath(const Route &r, const Path &p) const
 {
-    for (int i = 0; i < p.size(); ++i)
+    for (int i = 0; i < p.size(); ++i) {
+        qDebug() << "Move" << i << p[i];
         visualizeState(r, p[i], i);
+    }
 }
 
 void Climber::visualizeState(const Route &r, const ClimberState &pos, int index) const
@@ -113,4 +118,9 @@ void Climber::drawState(cv::Mat &img, const Route &r, const ClimberState s) cons
             drawContours(img, contourWrapper, 0, limbColors[i], 2);
         }
     }
+
+    if (s.getCom().x != -1)
+        circle(img, s.getCom(), 20, Scalar(0,0,0));
+    else
+        circle(img, _engine->geometricCenter(s), 20, Scalar(0,0,0));
 }

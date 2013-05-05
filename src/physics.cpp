@@ -133,7 +133,9 @@ Point Physics::geometricCenter(const ClimberState &pos) const
 
 bool Physics::analyzeForces(const ClimberState &pos) const
 {
+    return true;
     Q_ASSERT(isRouteLoaded());
+    Q_ASSERT(pos.getCom().x > -1 && pos.getCom().y > -1);
     ClimberCoordinates coord(pos, _route);
 
     // half the weight is in the center of mass, the other half is distributed

@@ -54,6 +54,11 @@ int ClimberState::getGripIndex(int i) const
     return getGripIndex((Limb) i);
 }
 
+Point ClimberState::getCom() const
+{
+    return _com;
+}
+
 ClimberState ClimberState::move(Limb l, int grip) const
 {
     ClimberState next = *this;

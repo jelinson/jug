@@ -24,6 +24,7 @@ public:
 
     int getGripIndex(Limb l) const;
     int getGripIndex(int i) const;
+    cv::Point getCom() const;
     ClimberState move(Limb l, int grip) const;
     bool handOn(int grip) const;
     bool isEquivalent(const ClimberState& other) const;

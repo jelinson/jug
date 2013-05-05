@@ -6,7 +6,7 @@ QDebug operator<<(QDebug db, Limb l)
 {
     switch ((int) l) {
     case (int) LeftArm:
-        db << "leg arm";
+        db << "left arm";
         break;
     case (int) RightArm:
         db << "right arm";
@@ -99,4 +99,12 @@ bool operator!=(const ClimberState& a, const ClimberState& b)
 bool operator<(const ClimberState& a, const ClimberState& b)
 {
     return ClimberState::compare(a, b);
+}
+
+QDebug operator<<(QDebug db, const ClimberState& state)
+{
+    db.nospace() << "ClimberState:: com:" << state._com;
+    for (int i = 0; i < N_LIMBS; ++i)
+        db << (Limb) i << " at " << state.getGripIndex(i);
+    return db.space();
 }

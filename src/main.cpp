@@ -47,7 +47,7 @@ int main(int argc, char* argv[])
     RouteFinder rf;
     Route route = rf.find(&img);
     route.analyzeGrips();
-    route.visualize();
+    //route.visualize();
     cv::destroyAllWindows();
 
     Physics* engine = new Physics;

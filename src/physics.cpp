@@ -30,13 +30,13 @@ bool Physics::isPossible(const ClimberState &pos) const
     }
 
     // check limb crossing
-    if (coord[LeftArm].x > coord[RightArm].x) {
+    if (coord[LeftArm].x > coord[RightArm].x + CS_LIMB_MIN) {
         if (DEBUG_LEVEL >= VERBOSE)
             qDebug() << "The hands were crossed";
         return false;
     }
 
-    if (coord[LeftLeg].x > coord[RightLeg].x) {
+    if (coord[LeftLeg].x > coord[RightLeg].x + CS_LIMB_MIN) {
         if (DEBUG_LEVEL >= VERBOSE)
             qDebug() << "The legs were crossed";
         return false;

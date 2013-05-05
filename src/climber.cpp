@@ -64,12 +64,17 @@ QList<ClimberState> Climber::start(const Route &r) const
 
         // hands match
         arrangements.append(ClimberState(i + 2, i + 2, i + 1, i));
+        arrangements.append(ClimberState(i + 2, i + 2, i, i + 1));
         arrangements.append(ClimberState(i + 3, i + 3, i + 1, i));
+        arrangements.append(ClimberState(i + 3, i + 3, i, i + 1));
 
-        for (int j = 0; j < arrangements.length(); ++j)
+        for (int j = 0; j < arrangements.length(); ++j) {
+            qDebug() << "Testing" << arrangements[j];
+            visualizeState(r, arrangements[j]);
             if (_engine->isPossible(arrangements[j]) && _engine->isReachableStart(arrangements[j]))
                  foreach (ClimberState s, _engine->configurations(arrangements[j]))
                      feasibleStarts.append(s);
+        }
 
         if (!feasibleStarts.empty())
             return feasibleStarts;
@@ -82,16 +87,20 @@ QList<ClimberState> Climber::start(const Route &r) const
 
 void Climber::visualizePath(const Route &r, const Path &p) const
 {
-    for (int i = 0; i < p.size(); ++i) {
-        Mat stateViewer = r.imgCopy();
-        Q_ASSERT(stateViewer.data);
+    for (int i = 0; i < p.size(); ++i)
+        visualizeState(r, p[i], i);
+}
 
-        drawState(stateViewer, r, p[i]);
-        QString imgName("Move");
-        imgName.append(QString::number(i));
+void Climber::visualizeState(const Route &r, const ClimberState &pos, int index) const
+{
+    Mat stateViewer = r.imgCopy();
+    Q_ASSERT(stateViewer.data);
 
-        jug::showImage(&stateViewer, imgName.toStdString(), true);
-    }
+    drawState(stateViewer, r, pos);
+    QString imgName("Move");
+    imgName.append(QString::number(index));
+
+    jug::showImage(&stateViewer, imgName.toStdString(), true);
 }
 
 void Climber::drawState(cv::Mat &img, const Route &r, const ClimberState s) const

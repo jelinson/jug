@@ -2,6 +2,7 @@
 #define CLIMBERSTATE_H
 
 #include <opencv/cv.h>
+#include "geometry.h"
 #include "globals.h"
 
 enum Limb {
@@ -15,6 +16,7 @@ QDebug operator<<(QDebug db, Limb l);
 class ClimberState
 {
     friend class Physics;
+    friend QDebug operator<<(QDebug db, const ClimberState& state);
 public:
     ClimberState();
     ClimberState(int lh, int rh, int lf, int rf, cv::Point com=cv::Point(-1, -1));
@@ -37,5 +39,6 @@ private:
 bool operator==(const ClimberState& a, const ClimberState& b);
 bool operator!=(const ClimberState& a, const ClimberState& b);
 bool operator<(const ClimberState& a, const ClimberState& b);
+QDebug operator<<(QDebug db, const ClimberState& state);
 
 #endif // CLIMBERSTATE_H

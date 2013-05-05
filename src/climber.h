@@ -24,6 +24,7 @@ public:
 private:
     QList<ClimberState> start(const Route& r) const;
     void visualizePath(const Route& r, const Path& p) const;
+    void visualizeState(const Route& r, const ClimberState& pos, int index=-1) const;
     void drawState(cv::Mat& img, const Route &r, const ClimberState s) const;
 
     Physics *_engine;

@@ -13,6 +13,7 @@ class Searcher
 public:
     Searcher();
     static Path bfs(PathProblem& p);
+    static Path aStart(PathProblem& p);
 
 private:
     static Path recoverPath(const ClimberState& end,

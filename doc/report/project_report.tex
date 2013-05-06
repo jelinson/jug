@@ -1,0 +1,82 @@
+\documentclass[pdftex,12pt]{article}
+
+%%% Top matter
+
+\usepackage[usenames,dvipsnames]{color}
+\usepackage[margin=1in]{geometry}
+\usepackage[pdftex]{graphicx}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath, amsthm, amsfonts}
+\usepackage{amssymb, verbatim, mathpazo}
+\usepackage{hyperref}
+
+\setlength{\parindent}{0pt}
+
+\newcommand{\block}{\mathbb}
+\newcommand{\script}{\mathcal}
+\newcommand{\fancy}{\mathfrak}
+\newcommand{\C}{\block{C}}
+\newcommand{\R}{\block{R}}
+\newcommand{\Z}{\block{Z}}
+\newcommand{\Q}{\block{Q}}
+\newcommand{\N}{\block{N}}
+\newcommand{\I}{^{-1}}
+\newcommand{\set}[2]{\{#1|#2\}}
+\newcommand{\topic}[1]{\noindent{\textbf{#1}}}
+\newcommand{\bij}{\longleftrightarrow}
+\newcommand{\bslash}{\setminus}
+\newcommand{\cl}[1]{\overline{#1}}
+\newcommand{\seq}{\subseteq}
+\newcommand{\ds}{\displaystyle}
+\newcommand{\Wlog}{Without loss of generality }
+\newcommand{\rp}{$(\Rightarrow)$ }
+\newcommand{\lp}{$(\Leftarrow)$ }
+\newcommand{\cbox}[2]{\fcolorbox{#1}{white}{#2}}
+\newcommand{\tx}[1]{\text{#1}}
+\newcommand{\horbar}{\rule{\linewidth}{0.4mm}}
+
+\renewcommand{\qedsymbol}{\tiny$\blacksquare$}
+\renewcommand{\labelenumi}{(\alph{enumi})}
+
+\newtheorem{thm}{Theorem}
+\newtheorem{prop}[thm]{Proposition}
+\newtheorem{cor}[thm]{Corollary}
+\newtheorem{lem}[thm]{Lemma}
+
+\theoremstyle{definition}
+\newtheorem{defn}{Definition}
+\newtheorem{ex}{Example}
+\newtheorem{nex}[ex]{Non-Example}
+
+\theoremstyle{remark}
+\newtheorem*{rec}{Recall}
+\newtheorem*{rem}{Remark}
+\newtheorem*{note}{Note}
+\newtheorem*{notate}{Notation}
+\newtheorem*{idea}{Idea}
+\newtheorem*{question}{Question}
+
+%%% Title
+
+\begin{document}
+\begin{center}
+\horbar \\
+\textsc{Julius Elinson} \hfill \textsc{\today}\\[.1cm]
+\textsc{\Large{Image-Based Rock-Climbing Simulator}}\\[-.1cm]
+\horbar \\[.4cm]
+\end{center}
+
+%%% Body
+\subsection*{Background}
+Rock-climbing is a sport that presents both a physical and athletic challenge. At indoor gyms, climbing walls contain a number routes with varying difficultly that are delimited often by the color of the grips. The difficulty is determined by the number of grips, their sizes and positions, as well as contours in the wall itself. To complete a route, one must use only the designated grips with their hands and feet to ascend to the top; the goal is simply to get to the last grip and thus a climber can use any subset of the available grips and in any order. Thus a route is a set of grips, whereas a path is a ordered list composed of a subset of the grips of a certain route. Climbing requires both the physical stamina to ascend the wall, but also constructing a viable path where one's body weight is balanced and each move can be completed given the physical constraints of each climber.
+
+\subsection*{Objectives}
+The goal of this project was to simulate a rock climber by constructing a physically-feasible path to solve a route based on an input image. As part of that objective, the program had to be able to identify a particular route within an image, analyze each grip in the route, model basic human motion and perform an intelligent search to find a path to the top. To limit the scope and difficulty of the project, only routes without overhang\footnote{A overhang is when a wall juts out so that climbing it would cause the climber to become supine.} were considered, so that motion and forces would be limited to the 2-D plane. \\ \\
+In order to simulate a human interacting with grips, the program had to be able to analyze a wide array of grip types. Different grips at different orientations can support different forces applied on them. Moreover, variations in size, texture and shape have implications for what and how many limbs can be put on a particular grip at given time. Additionally, climber positions need to analyze each limb in the context of the others in order to respect physical constraints of the human body as well as analyze forces and weight distribution in the aggregate.
+
+
+
+
+
+
+\end{document}

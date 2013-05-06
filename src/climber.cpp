@@ -71,6 +71,12 @@ QList<ClimberState> Climber::start(const Route &r) const
         arrangements.append(ClimberState(i + 3, i + 3, i + 1, i));
         arrangements.append(ClimberState(i + 3, i + 3, i, i + 1));
 
+        // feet match
+        arrangements.append(ClimberState(i + 2, i + 3, i, i));
+        arrangements.append(ClimberState(i + 2, i + 3, i + 1, i + 1));
+        arrangements.append(ClimberState(i + 3, i + 2, i, i));
+        arrangements.append(ClimberState(i + 3, i + 2, i + 1, i + 1));
+
         for (int j = 0; j < arrangements.length(); ++j) {
             qDebug() << "Testing" << arrangements[j];
             //visualizeState(r, arrangements[j]);

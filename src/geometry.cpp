@@ -48,6 +48,7 @@ void NormalField::add(const Point &slope)
 
 int NormalField::lookUp(const Point &slope) const
 {
+    /// \todo add assert checks
     return _counts[slope.x][slope.y];
 }
 

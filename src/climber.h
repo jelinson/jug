@@ -1,6 +1,7 @@
 #ifndef CLIMBER_H
 #define CLIMBER_H
 
+#include "stdio.h"
 #include <opencv/cv.h>
 #include <QList>
 #include "climberspecs.h"

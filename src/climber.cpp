@@ -112,6 +112,11 @@ void Climber::visualizeState(const Route &r, const ClimberState &pos, int index)
     QString imgName("Move");
     imgName.append(QString::number(index));
 
+    QString filename("move_");
+    filename.append(QString::number(index));
+    filename.append(".jpg");
+
+    imwrite(filename.toStdString(), stateViewer);
     jug::showImage(&stateViewer, imgName.toStdString(), true);
 }
 
@@ -133,6 +138,6 @@ void Climber::drawState(cv::Mat &img, const Route &r, const ClimberState s) cons
 
     rectangle(img, Rect(0, IMG_HEIGHT - 12, IMG_WIDTH, 12), Scalar(255, 255, 255), -1);
 
-    putText(img, "Black=COM, Blue=RL, White=LL, Red=LA, Green=RA",
+    putText(img, "Black=COM, Blue=LL, White=RL, Red=LA, Green=RA",
             Point(0, IMG_HEIGHT - 2), FONT_HERSHEY_PLAIN, 1, Scalar(0, 0, 0), 1);
 }

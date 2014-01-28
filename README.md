@@ -21,10 +21,10 @@ Photos from [Hangar 18](http://www.climbhangar18.com/upland/) in Upland.
 3. Install CMake (tested on 2.8.10) from [here](http://www.cmake.org/cmake/resources/software.html).
 4. In this directory, run
 
-    mkdir build  
-    cd build  
-    cmake ../src  
-    make
+        mkdir build  
+        cd build  
+        cmake ../src  
+        make
 
 5. If everything worked, you can run jug with the command above. The program will by default load one of the images it comes with, or the user can hand it a file path containing an image.
 
